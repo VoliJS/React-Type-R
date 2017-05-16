@@ -132,3 +132,30 @@ function _translateType( Type : Function ){
     }
 }
 
+function primitiveCheck( type, isRequired ){
+    return function isPrimitive(props, propName, componentName) {
+        const value = props[ propName ];
+
+        if( value == null ){
+            return isRequired ?  new Error() : void 0;
+        }
+
+        if( typeof value !== type ){
+            return new Error();
+        }
+    }
+}
+
+function subclassCheck( type, isRequired ){
+    return function isPrimitive(props, propName, componentName) {
+        const value = props[ propName ];
+
+        if( value == null ){
+            return isRequired ?  new Error() : void 0;
+        }
+
+        if( !( value instanceof type ) ){
+            return new Error();
+        }
+    }
+}
