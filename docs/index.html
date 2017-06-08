@@ -132,6 +132,132 @@ All class Component definitions must be preceeded with the <code>@define</code> 
 
 <h1 id="tutorials">Tutorials</h1>
 <h2 id="data-binding-and-forms">Data binding and forms</h2>
+<p>In this tutorial we will learn the state management and two-way data binding basics on the example of the simple user info editing form.</p>
+<p><img src="./form.png" alt="form"></p>
+<p>Our form will be the simple stateful component holding the state of the form in its local state, and for the purpose of the illustration storing its state in the browser&#39;s localStorage.</p>
+<h3 id="defining-the-stateful-component">Defining the stateful component</h3>
+<p>React-MVx extends React namespace and must be used instead of React. The most important class it exports is the modified <code>Component</code>.</p>
+<p>The general definition of the stateful component looks like this:</p>
+<pre><code class="highlight javascript"><span class="hljs-keyword">import</span> React, { define } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-mvx'</span>
+<span class="hljs-keyword">import</span> ReactDOM <span class="hljs-keyword">from</span> <span class="hljs-string">'react-dom'</span>
+
+@define <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Application</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+    <span class="hljs-keyword">static</span> state = {
+        <span class="hljs-comment">/* state attributes definition */</span>
+    };
+
+    render(){
+        <span class="hljs-keyword">return</span> (
+            <span class="hljs-comment">/* jsx */</span>
+        );
+    }
+}
+
+ReactDOM.render( <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Application</span>/&gt;</span></span>, <span class="hljs-built_in">document</span>.getElementById( <span class="hljs-string">'react-application'</span> ) );
+</code></pre>
+<p>There are few differences to raw React so far:</p>
+<ul>
+<li>Component definitions (as all React-MVx definitions) must be preceded with the <code>@define</code> decorator. </li>
+<li>The state is not <em>assigned</em> in the constructor, but <em>declaratively defined</em> in class definition.</li>
+</ul>
+<h3 id="declaring-the-state">Declaring the state</h3>
+<p>In the simplest case like ours when the state is flat and consists of primitive types, the state definition looks like the plain object. We list state attributes accompanied with their default values.</p>
+<pre><code class="highlight javascript">    <span class="hljs-keyword">static</span> state = {
+        <span class="hljs-attr">name</span> : <span class="hljs-string">''</span>,
+        <span class="hljs-attr">email</span> : <span class="hljs-string">''</span>,
+        <span class="hljs-attr">isActive</span> : <span class="hljs-literal">true</span>
+    };
+</code></pre>
+<p>This declaration will lead to an automatic creation of the observable <code>component.state</code> object of the similar shape when the <code>Application</code> component will be mounted. No need to initialize the state in the constructor.</p>
+<p>No need for <code>component.setState()</code> either; plain assignments to the <code>component.state</code> members will be detected and will lead to the component&#39;s render. Which is cute, but we won&#39;t need any explicit state modifications in this example. Because we have two-way data binding.</p>
+<h3 id="adding-the-form-s-markup">Adding the form&#39;s markup</h3>
+<p>Now it&#39;s the time to create the markup for our form using the standard React&#39;s <a href="https://facebook.github.io/react/docs/forms.html#controlled-components">&quot;controlled components&quot;</a>. Controlled components do not have their own local state; it&#39;s mapped to some external state container.</p>
+<p>In React-MVx this mapping is done with <em>links</em>. Think of <a href="../04_Link/00_Overview.md">link</a> in this example as an object-reference to the state&#39;s attribute. <code>link.props</code> return the <code>value</code>/<code>onChange</code> props pair which is expected by standard <em>controlled form components</em>.</p>
+<pre><code class="highlight javascript">    render(){
+        <span class="hljs-comment">// Link the state...</span>
+        <span class="hljs-keyword">const</span> { name, email, isActive } = <span class="hljs-keyword">this</span>.linkAll();
+
+        <span class="hljs-keyword">return</span> (
+            &lt;form&gt;
+                &lt;label&gt;
+                    Name: &lt;input type="text" { ...name.props }/&gt;
+                &lt;/label&gt;
+
+                &lt;label&gt;
+                    Email: &lt;input type="text" { ...email.props }/&gt;
+                &lt;/label&gt;
+
+                &lt;label&gt;
+                    Is active: &lt;input type="checkbox" { ...isActive.props }/&gt;
+                &lt;/label&gt;
+            &lt;/form&gt;
+        );
+    }
+</code></pre>
+<p>At this stage, we have an editable form.</p>
+<h3 id="adding-the-persistent-state">Adding the persistent state</h3>
+<p>We would like to store the state of our form in the browser&#39;s localStorage. &quot;Save&quot; button must save the state, while &quot;Cancel&quot; must return the form to its default state. First of all, lets add these buttons:</p>
+<pre><code class="highlight javascript">    render(){
+        ...
+        return (
+            <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">onSubmit</span>=<span class="hljs-string">{</span> <span class="hljs-attr">this.onSubmit</span> }&gt;</span>
+                ...
+                <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"submit"</span>&gt;</span>Save<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"button"</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{</span> <span class="hljs-attr">this.onCancel</span> }&gt;</span>
+                    Clear
+                <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span></span>
+        );
+    }
+</code></pre>
+<p>We want &quot;Cancel&quot; button to set out state to its defaults, which is represented in the code quite literally:</p>
+<pre><code class="highlight javascript">    onCancel = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-keyword">this</span>.state.set( <span class="hljs-keyword">this</span>.state.defaults() );
+</code></pre>
+<p>And the &quot;Save&quot; button must save the state to the localStorage. Good news is that <em>all the state in React-MVx is serializable by default</em>.</p>
+<pre><code class="highlight javascript">    onSubmit = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> localStorage.setItem( <span class="hljs-string">'users-form'</span>, <span class="hljs-built_in">JSON</span>.stringify( <span class="hljs-keyword">this</span>.state ) );
+</code></pre>
+<p>Now, all we have to do is to restore the state on load. Which is done in the standard React&#39;s <code>componentWillMount</code> lifecycle hook.</p>
+<pre><code class="highlight javascript">    componentWillMount(){
+        <span class="hljs-keyword">const</span> json = <span class="hljs-built_in">JSON</span>.parse( localStorage.getItem( <span class="hljs-string">'users-form'</span> ) || <span class="hljs-string">'{}'</span> );
+        <span class="hljs-keyword">this</span>.state.set( json, { <span class="hljs-attr">parse</span> : <span class="hljs-literal">true</span> } );
+    }
+</code></pre>
+<p>That&#39;s really it. Here are the complete <a href="https://github.com/gaperton/react-mvx-examples/blob/master/src/form.jsx">sources</a> of our example, and here you can see the example <a href="https://gaperton.github.io/react-mvx-examples/dist/form.html">working</a>.</p>
+<h3 id="api-used-in-the-example">API used in the example</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>static</code> state = { attrName : <code>attrDef</code>, ... }</td>
+<td>Inline component state definition</td>
+</tr>
+<tr>
+<td>component.state</td>
+<td>record representing the component state</td>
+</tr>
+<tr>
+<td>record.set( data, options? )</td>
+<td></td>
+</tr>
+<tr>
+<td>record.toJSON()</td>
+<td></td>
+</tr>
+<tr>
+<td>component.linkAll()</td>
+<td></td>
+</tr>
+<tr>
+<td>link.props</td>
+<td></td>
+</tr>
+</tbody>
+</table>
 <h2 id="input-validation">Input validation</h2>
 <h2 id="editable-lists">Editable lists</h2>
 <h2 id="paging">Paging</h2>
