@@ -21,7 +21,7 @@
     "compile": "./node_modules/.bin/tsc && ./node_modules/.bin/webpack -p",
     "deploy": "cp -R ./dist ./examples/*/node_modules/react-mvx",
     "build": "npm run pull && npm run compile",
-    "docs": "~/.composer/vendor/bin/daux --source=docsource --destination=docs"
+    "docs": "node docs/build.js"
   },
   "keywords": [
     "react",
@@ -35,10 +35,9 @@
   "devDependencies": {
     "@types/prop-types": "*",
     "@types/react": "*",
-    "daux-api-docs-theme": "^1.0.0",
-    "handlebars": "^3.0.3",
-    "highlight.js": "^8.7.0",
-    "marked": "^0.3.5",
+    "handlebars": "*",
+    "highlight.js": "*",
+    "marked": "*",
     "prop-types": "*",
     "react": "*",
     "react-dom": "*",
