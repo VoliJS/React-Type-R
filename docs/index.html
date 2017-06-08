@@ -307,6 +307,176 @@ All class Component definitions must be preceeded with the <code>@define</code> 
 </tr>
 </tbody>
 </table>
+<h2 id="props">props</h2>
+<p>Component <em>static props declaration</em> replaces standard React&#39;s <code>propTypes</code> and <code>defaultProps</code>.</p>
+<h3 id="-static-props-name-propdef-"><code>static</code> props = { name : <code>propDef</code>, ... }</h3>
+<p>Declare component props. Declaration is an object </p>
+<pre><code class="highlight javascript"><span class="hljs-keyword">import</span> React, { define } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-mvx'</span>
+
+@define <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PropsDemo</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+    <span class="hljs-keyword">static</span> props = {
+        <span class="hljs-attr">name</span> : Declaration,
+        ...
+    }
+}
+</code></pre>
+<h3 id="-static-purerender-true"><code>static</code> pureRender = true</h3>
+<p>Prevents subsequent render calls in case if props were unchanged. It&#39;s known as &quot;pure render&quot; optimization.</p>
+<p><em>Inner changes of records and collections</em> are detected and taken into account. Thus, it works properly with mutable records and collections.</p>
+<p><code>static props</code> declaration is required for <code>pureRender</code> to work. Only declared props will be tracked and compared.</p>
+<h3 id="-propdef-name-constructor"><code>propDef</code> name : Constructor</h3>
+<p>Checks if component prop is an instance of the <code>Constructor</code> and puts the warning to the console if the prop type is not compatible.</p>
+<h3 id="-propdef-name-constructor-isrequired"><code>propDef</code> name : Constructor.isRequired</h3>
+<p>Mark property as required.</p>
+<pre><code class="highlight javascript"><span class="hljs-keyword">import</span> React, { define } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-mvx'</span>
+@define <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PropsDemo</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+    <span class="hljs-keyword">static</span> props = {
+        <span class="hljs-comment">// Simple form of annotation is just the constructor function designating the type.</span>
+        optionalArray: <span class="hljs-built_in">Array</span>,
+        <span class="hljs-attr">optionalBool</span>: <span class="hljs-built_in">Boolean</span>,
+        <span class="hljs-attr">optionalFunc</span>: <span class="hljs-built_in">Function</span>,
+        <span class="hljs-attr">optionalNumber</span>: <span class="hljs-built_in">Number</span>,
+        <span class="hljs-attr">optionalObject</span>: <span class="hljs-built_in">Object</span>,
+        <span class="hljs-attr">optionalString</span>: <span class="hljs-built_in">String</span>,
+        <span class="hljs-attr">optionalSymbol</span>: <span class="hljs-built_in">Symbol</span>,   
+
+        <span class="hljs-comment">// Anything that can be rendered: numbers, strings, elements or an array</span>
+        <span class="hljs-comment">// (or fragment) containing these types.</span>
+        optionalNode: React.Node,
+
+        <span class="hljs-comment">// A React element.</span>
+        optionalElement: React.Element,
+
+        <span class="hljs-comment">// You can also declare that a prop is an instance of a class.</span>
+        optionalMessage: Message,
+
+        <span class="hljs-comment">// You can chain any of the above with `isRequired` to make sure a warning</span>
+        <span class="hljs-comment">// is shown if the prop isn't provided.</span>
+        requiredFunction : <span class="hljs-built_in">Function</span>.isRequired
+    };
+    ...
+}
+</code></pre>
+<h3 id="-propdef-name-constructor-value-defaultvalue-"><code>propDef</code> name : Constructor.value( defaultValue )</h3>
+<p>Assign default property value.</p>
+<h3 id="-propdef-name-defaultvalue"><code>propDef</code> name : defaultValue</h3>
+<p>Assign default property value. The the type will be inferred from the <code>defaultValue</code>.</p>
+<p>Any function in props annotation is treated as a constructor. Thus, <code>Function.value( defaultValue )</code> must be used to specify the defaults for functions.</p>
+<pre><code class="highlight javascript"><span class="hljs-keyword">import</span> React, { define } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-mvx'</span>
+
+@define <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PropsDemo</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+    <span class="hljs-keyword">static</span> props = {
+        <span class="hljs-attr">withDefault</span> : <span class="hljs-built_in">String</span>.value( <span class="hljs-string">'defaultValue'</span> ),
+        <span class="hljs-attr">anotherDefault</span> : <span class="hljs-string">'defaultValue'</span>
+    }
+}
+</code></pre>
+<h3 id="-propdef-name-constructor-has-watcher-componentmethodname-"><code>propDef</code> name : Constructor.has.watcher( &#39;componentMethodName&#39; )</h3>
+<h3 id="-propdef-name-constructor-has-watcher-function-newvalue-name-"><code>propDef</code> name : Constructor.has.watcher( function( newValue, name ){ ... } )</h3>
+<p><em>Watcher</em> is the function which is called when the particular prop is assigned with new value.</p>
+<p>Watcher is called after <code>componentWillMount</code>, and may be called during <code>componentWillReceiveProps</code> if the property is changed.
+Watcher is executed in the context of the component.</p>
+<pre><code class="highlight javascript"><span class="hljs-keyword">import</span> React, { define } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-mvx'</span>
+
+@define <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PropsDemo</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+    <span class="hljs-keyword">static</span> props = {
+        <span class="hljs-attr">first</span> : <span class="hljs-built_in">String</span>.has.watcher( <span class="hljs-string">'onFirstChange'</span> ),
+        <span class="hljs-attr">second</span> : <span class="hljs-built_in">Number</span>.has.watcher( <span class="hljs-function"><span class="hljs-params">second</span> =&gt;</span> <span class="hljs-built_in">console</span>.log( <span class="hljs-string">'Received new prop:'</span>, second ) )
+    }
+
+    onFirstChange( newValue, name ){
+        <span class="hljs-built_in">console</span>.log( <span class="hljs-string">'First prop is about to change:'</span>, newValue );
+    }
+}
+</code></pre>
+<h3 id="-propdef-name-recordorcollection-has-changeevents-true-"><code>propDef</code> name : RecordOrCollection.has.changeEvents( true )</h3>
+<p>Observe <em>internal changes</em> of the record or collection and update the component in case of changes.</p>
+<h3 id="-propdef-name-eventsource-has-changeevents-event1-event2-"><code>propDef</code> name : EventSource.has.changeEvents( &#39;event1 event2 ...&#39; )</h3>
+<p>Update the component in case if property triggers any of the listed events.</p>
+<pre><code class="highlight javascript"><span class="hljs-keyword">import</span> React, { define } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-mvx'</span>
+<span class="hljs-keyword">import</span> { Record } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-mvx'</span>
+
+@define <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PropsDemo</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+    <span class="hljs-keyword">static</span> props = {
+        <span class="hljs-comment">// Render on every change</span>
+        trackInnerChanges : Record.has.changeEvents( <span class="hljs-literal">true</span> ),
+        <span class="hljs-comment">// Render when record is added to or removed from the collection</span>
+        anotherDefault : Collection.has.changeEvents( <span class="hljs-string">'add remove'</span> )
+    }
+}
+</code></pre>
+<h3 id="-propdef-name-eventsource-has-events-event-handler-"><code>propDef</code> name : EventSource.has.events({ event : handler, ... })</h3>
+<p>Subscribe for events from the component property. <code>handler</code> can either be the name of the component&#39;s method,
+or the function handling the event. Handler is executed in the context of the component.</p>
+<h2 id="state">state</h2>
+<p>Component&#39;s state is modeled as Type-R <code>Record</code>. Record is created before <code>componentWillMount()</code> and disposed after <code>componentWillUnmount()</code>.
+All changed inside of the state record are observed, and the component is updated in case of change.</p>
+<h3 id="-static-state-recordconstructor"><code>static</code> state = RecordConstructor</h3>
+<p>Define stateful component with the state Record declared externally.</p>
+<h3 id="-static-state-name-attrdef-"><code>static</code> state = { name : <code>attrDef</code>, ... }</h3>
+<p>Implicitly define state Record with a given attributes declaration. All declarations working on <code>props</code> works for the state as well. Refer to the Record documentation for the attributes declaration syntax.</p>
+<h3 id="component-state">component.state</h3>
+<p>Holds an object of the <code>Record</code> subclass. </p>
+<p><em>Do not use <code>component.setState()</code></em>. Use direct assignments to modify the state:</p>
+<pre><code><span class="hljs-keyword">this</span>.state.x = <span class="hljs-number">5</span>;
+
+
+</code></pre><p>Refer to the Record documentation for the complete list of methods.</p>
+<h3 id="component-transaction-fun-">component.transaction( fun )</h3>
+<p>Group the sequence of state (and props) updates in the single transaction leading to single UI update.</p>
+<pre><code><span class="hljs-keyword">this</span>.transaction( <span class="hljs-function"><span class="hljs-params">state</span> =&gt;</span> {
+    state.a++;
+    state.b++;
+    <span class="hljs-keyword">this</span>.props.collection.reset();
+});
+
+
+</code></pre><p>Read more about transactions in Record&#39;s manual.</p>
+<h2 id="store">store</h2>
+<p>Stores in Type-R are internally similar to the Record and used to resolve one-to-many and many-to-many relationships by id.
+Stores <em>must not</em> be used to store UI state; they are intended to hold the shared domain state which is cross-referenced by id.</p>
+<p>There may be multiple stores in Rect-MVx. There is the single <em>default store</em> (<code>Store.global</code>) which is used to cache the data that must be accessible across the pages.</p>
+<p>Specifying the store for the top-level component sets this store as the primary one for all the internal state of the current component subtree.</p>
+<h3 id="-static-store-existingstore"><code>static</code> store = existingStore</h3>
+<p>Expose the <code>existingStore</code> to the component subtree. Update component on store changes.</p>
+<h3 id="-static-store-storeconstructor"><code>static</code> store = StoreConstructor</h3>
+<p>Creates the local store on component&#39;s mount and dispose it when component is unmounted.</p>
+<p>Expose the store to the component subtree. Update component on store changes.</p>
+<h3 id="-static-store-attrname-attrdef-"><code>static</code> store = { attrName : <code>attrDef</code>, ... }</h3>
+<p>Implicitly create the <code>Store</code> subclass from the given attribute spec.</p>
+<p>Accepts the same <code>attrDef</code> as the <code>state</code> and <code>Record</code>.</p>
+<h3 id="component-store">component.store</h3>
+<p>When the <code>static store</code> is defined, provide the access to the store in component.</p>
+<p>Store <em>is not</em> directly accessible to the subcomponents; you have to pass values down as props.</p>
+<h2 id="context">context</h2>
+<p>Static <code>context</code> and <code>childContext</code> declarations replaces React&#39;s standard <code>contextTypes</code> and <code>childContextTypes</code>.</p>
+<h3 id="-static-context-name-propdef-"><code>static</code> context = { name : <code>propDef</code>, ... }</h3>
+<p>Replacement for standard <code>contextTypes</code>.</p>
+<h3 id="-static-childcontext-name-propdef-"><code>static</code> childContext = { name : <code>propDef</code>, ... }</h3>
+<p>Replacement for standard <code>childContextTypes</code>.</p>
+<p><code>getChildContext()</code> function is required to create the context as in raw React.</p>
+<p>Subset of <code>static props</code> declaration is supported for the context <code>propDef</code>.</p>
+<h3 id="-propdef-name-constructor"><code>propDef</code> name : Constructor</h3>
+<p>Checks whenever the value is an instance of the <code>Constructor</code> and puts the warning to the console if the prop type is not compatible.</p>
+<h3 id="-propdef-name-constructor-isrequired"><code>propDef</code> name : Constructor.isRequired</h3>
+<p>Value is required.</p>
+<h2 id="links-to-state">Links to state</h2>
+<p>Component implements shorthand methods for creating links to state.
+The same API is implemented by every Record class. All the methods below generally forward calls to the <code>component.state</code>.</p>
+<h3 id="component-linkat-key-">component.linkAt( &#39;key&#39; )</h3>
+<p>Create the link for the state member <code>key</code>. Is a shortcut for <code>component.state.linkAt()</code> method.</p>
+<p>All records support <code>linkAt()</code> method as well.</p>
+<h3 id="component-linkall-">component.linkAll()</h3>
+<p>Create links for all (or specified) the state members. All records support <code>linkAll()</code> method as well.</p>
+<h3 id="component-links">component.links</h3>
+<p>Direct access to the links cache. Can be used in event handlers to access the links created during the last <code>render()</code>.</p>
+<p>All links created for records (and for the component&#39;s state) are being cached. They are recreated only in case when their value has been changed.</p>
+<h2 id="ui-updates">UI updates</h2>
+<h3 id="component-asyncupdate-">component.asyncUpdate()</h3>
+<p>Safe version of the <code>forceUpdate()</code>. Gracefully handles component disposal and UI update transactions.</p>
+<p>Shall be used in place of every manual call to <code>forceUpdate()</code>.</p>
+<h2 id="events">Events</h2>
+<p>Component implements <code>Events</code> interface from the Type-R framework, thus it&#39;s able to trigger and subscribe for events.</p>
 <h1 id="link">Link</h1>
 <p>Link is an intermediate object used to implement the two-way data binding.
 It acts like a transport for the value, the callback to modify it, its validation error, abstracting out
@@ -327,6 +497,149 @@ related to the particuler attribute.</p>
 </code></pre>
 <p>Links makes it possible to create the semantic markup for the form elements, encapsulating the
 all the required styles and validation error indication.</p>
+<h2 id="link-structure">Link structure</h2>
+<p>Here are the most important link members. All the link members are read-only and should not be modified directly.</p>
+<pre><code class="highlight javascript"><span class="hljs-comment">// Link's shape</span>
+{
+    <span class="hljs-attr">value</span> : <span class="hljs-comment">/* the value */</span>,
+    set( newValue ){ <span class="hljs-comment">/* the function to change it */</span>},
+    <span class="hljs-attr">error</span> : <span class="hljs-comment">/* validation error */</span>
+}
+</code></pre>
+<h3 id="link-value">link.value</h3>
+<p>Holds linked value. This value is immutable.</p>
+<h3 id="link-error">link.error</h3>
+<p>Holds the validation error (typically the text error message) which might be consumed and displayed by data-bound countrol.</p>
+<p>An <code>error</code> is populated automatically on link creation when using <code>linkAt()</code> or <code>linkAll()</code> methods, and is produced by declarative
+validators from <code>.has.check()</code> attributes annotations.</p>
+<h3 id="link-set-newvalue-">link.set( newValue )</h3>
+<p>Tells the state container to update the value.</p>
+<pre><code class="highlight javascript">&lt;button onClick={ () =&gt; boolLink.set( !boolLink.value ) } /&gt;
+</code></pre>
+<h3 id="link-update-prevvalue-newvalue-">link.update( prevValue =&gt; newValue )</h3>
+<p>Update link value using the given value transform function.</p>
+<pre><code class="highlight javascript">&lt;button onClick={ () =&gt; boolLink.update( <span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> !x ) } /&gt;
+</code></pre>
+<h2 id="create">Create</h2>
+<p>All records and collections may create links to its elements.
+Component has the shorthand methods to create links to its state record elements.</p>
+<p>You can create custom link object encapsulating complex data binding logic with <code>Link.value</code>.</p>
+<h3 id="record-linkat-attr-">record.linkAt( attr )</h3>
+<p>Create the link to the record&#39;s attribute. Semantically it&#39;s the reference to the attribute.</p>
+<pre><code class="highlight javascript"><span class="hljs-keyword">const</span> nameLink = user.linkAt( <span class="hljs-string">'name'</span> );
+</code></pre>
+<h3 id="collection-linkat-prop-">collection.linkAt( prop )</h3>
+<p>Create the link to the custom collection property. Property&#39;s setter <em>must</em> modify some record&#39;s attributes or change the collection.</p>
+<h3 id="component-linkat-key-">component.linkAt( key )</h3>
+<p>Create the link to the attribute of the conponent&#39;s state. Works similar to <code>component.state.linkAt( key )</code>.</p>
+<h3 id="record-linkall-">record.linkAll()</h3>
+<p>Link all (or listed) records&#39; attributes.</p>
+<pre><code class="highlight javascript"><span class="hljs-comment">// Link all attributes...</span>
+<span class="hljs-keyword">const</span> { name, email, age } = user.linkAll();
+
+<span class="hljs-comment">// Link specified attributes...</span>
+<span class="hljs-keyword">const</span> { name, email } = user.linkAll( <span class="hljs-string">'name'</span>, <span class="hljs-string">'email'</span> );
+</code></pre>
+<h3 id="component-linkall-">component.linkAll()</h3>
+<p>Link all (or listed) attributes of the component&#39;s state. Works similar to <code>component.state.linkAll()</code>.</p>
+<h3 id="collection-linkcontains-record-">collection.linkContains( record )</h3>
+<p>Create the boolean link which is <code>true</code> whenever the record is contained in the collection.</p>
+<p>Setting the link to <code>false</code> will remove record from the collection, setting it to true will add it.</p>
+<h3 id="link-value-value-set-">Link.value( value, set )</h3>
+<p>Create custom link with the given <code>value</code> and <code>set</code> function. Use the <code>link.check</code> method to populate the validation error.</p>
+<h2 id="transform">Transform</h2>
+<h3 id="link-equals-value-">link.equals( value )</h3>
+<p>Create boolean equality link which value is <code>true</code> whenever <code>link.value === value</code>, and <code>false</code> otherwise.</p>
+<p>When an equality link is assigned with <code>true</code> the parent link value is set with <code>value</code>, and with <code>null</code> otherwise.</p>
+<pre><code class="highlight javascript">&lt;Checkbox checkedLink={ stringLink.equals( <span class="hljs-string">'optionX'</span> ) } /&gt;
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Checkbox</span> <span class="hljs-attr">checkedLink</span>=<span class="hljs-string">{</span> <span class="hljs-attr">stringLink.equals</span>( '<span class="hljs-attr">optionY</span>' ) } /&gt;</span></span>
+</code></pre>
+<p>Useful for radio groups.</p>
+<h3 id="link-props">link.props</h3>
+<p>Converts the link to the standard <code>{ value, onChange }</code> props to be easily consumed by standard <code>&lt;input /&gt;</code> control.</p>
+<pre><code class="highlight javascript">&lt;input type=<span class="hljs-string">"text"</span> {...nameLink.props} /&gt;
+</code></pre>
+<h3 id="link-action-prevvalue-event-newvalue-">link.action( ( prevValue, event ) =&gt; newValue )</h3>
+<p>Convert the link to the UI event handler <code>event =&gt; void</code> which will transform the link using the given function.</p>
+<p><code>link.action</code> takes transform function, and produce a new function which takes single <code>event</code> argument.
+When it&#39;s called, <code>event</code> and link <code>value</code> are passes as transform parameters, and link will be updated 
+with returned value.</p>
+<pre><code class="highlight javascript"><span class="hljs-comment">// simple click event handler...</span>
+&lt;button onClick={ boolLink.action( <span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> !x ) } /&gt;
+
+<span class="hljs-comment">// manual binding to input control:</span>
+<span class="hljs-keyword">const</span> setValue = <span class="hljs-function">(<span class="hljs-params"> x, e </span>) =&gt;</span> e.target.value;
+...
+&lt;input  value={ link.value }
+        onChange={ link.action( setValue ) } /&gt;
+</code></pre>
+<p>This is particularly useful in (but not restricted to) UI event handlers.</p>
+<h3 id="link-check-predicate-value-boolean-errormsg-">link.check( predicate : value =&gt; boolean, errorMsg? )</h3>
+<p>Checks whenever the predicate is truthy on linked value, and if it&#39;s not, assigns <code>link.error</code> with <code>errorMsg</code>.
+Does nothing if <code>link.error</code> is already populated.</p>
+<p>This method may be used for additional validation in <code>render()</code>, and to populate the validation error for the custom links created with <code>Link.value()</code>.</p>
+<p>You typically don&#39;t need <code>link.check</code> for links created with <code>linkAt()</code> methods, because the validation happens inside of records.</p>
+<h2 id="link-to-objects-and-arrays">Link to objects and arrays</h2>
+<p>It&#39;s rather unusual scenario that you hold complex raw JS data as a part of your state, because typically the state is
+defined as a superposition of nested records and collections.</p>
+<p>Links can be used to make purely functional updates of the objects and arrays in records attributes. It&#39;s done with
+the help of <em>at-links</em>, which points to the elements of linked objects and arrays.</p>
+<h3 id="link-at-key-">link.at( key )</h3>
+<p>Create an <em>at-link</em> to the member of array or object.</p>
+<p>Whenever an <em>at-link</em> is updated, it will lead to proper purely functional update (with shallow copying) of the
+container (array or object).</p>
+<pre><code class="highlight javascript"><span class="hljs-comment">// Update this.state.array[ 0 ].name</span>
+<span class="hljs-keyword">this</span>.linkAt( <span class="hljs-string">'array'</span> ).at( <span class="hljs-number">0</span> ).at( <span class="hljs-string">'name'</span> ).set( <span class="hljs-string">'Joe'</span> );
+</code></pre>
+<h3 id="link-map-itemlink-itemkey-any-void-">link.map( ( itemLink, itemKey ) =&gt; any | void )</h3>
+<p>Map and filter through the linked array or object to produce an array.
+Mapping function receives <em>at-link</em> to the corresponding element.
+Whenever it returns <code>undefined</code>, the corresponding element is be skipped.</p>
+<pre><code class="highlight javascript"><span class="hljs-comment">// Render the linked array...</span>
+<span class="hljs-keyword">var</span> list = stringArrayLink.map( <span class="hljs-function">(<span class="hljs-params"> itemLink, index </span>) =&gt;</span> {
+    <span class="hljs-keyword">if</span>( itemLink.value ){ <span class="hljs-comment">// Skip empty elements</span>
+        <span class="hljs-keyword">return</span> (
+            <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{</span> <span class="hljs-attr">index</span> }&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">Input</span> <span class="hljs-attr">valueLink</span>=<span class="hljs-string">{</span> <span class="hljs-attr">itemLink</span> } /&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+        );
+    }
+});</span>
+</code></pre>
+<h3 id="link-update-clonedobject-modifiedobject-">link.update( clonedObject =&gt; modifiedObject )</h3>
+<p>Update linked object or array.</p>
+<p>Plain objects and arrays are shallow copied already, thus it&#39;s safe just to update the value in place.</p>
+<pre><code class="highlight javascript"><span class="hljs-comment">// Update the linked object</span>
+&lt;button onClick={ () =&gt; objLink.update( <span class="hljs-function"><span class="hljs-params">obj</span> =&gt;</span> {
+                                obj.a = <span class="hljs-number">1</span>;
+                                <span class="hljs-keyword">return</span> obj;
+                            }) } /&gt;
+</code></pre>
+<h3 id="link-action-clonedobject-event-object-">link.action( ( clonedObject, event ) =&gt; Object )</h3>
+<p>Creates action to update enclosed object or array.</p>
+<p>Plain objects and arrays are shallow copied already, thus it&#39;s safe just to update the value in place.</p>
+<h3 id="link-removeat-key-">link.removeAt( key )</h3>
+<p>Remove element with a given key from the linked object or array.</p>
+<h3 id="atlink-remove-">atLink.remove()</h3>
+<p>Remove element with a given key from the linked object or array.</p>
+<h2 id="link-to-objects">Link to objects</h2>
+<h3 id="link-pick-key1-key2-">link.pick( key1, key2, ... )</h3>
+<p>Create <em>at-links</em> to the object&#39;s members with designated keys, and wrap them in an object.</p>
+<pre><code class="highlight javascript"><span class="hljs-comment">// Bulk create at-links for the linked object</span>
+<span class="hljs-keyword">const</span> { name, email } = objLink.pick( <span class="hljs-string">'name'</span>, <span class="hljs-string">'email'</span> );
+</code></pre>
+<h2 id="link-to-arrays">Link to arrays</h2>
+<h3 id="linktoarray-splice-void">linkToArray.splice() : void</h3>
+<p>Similar to <code>Array.splice()</code> method, but performs purely functional update.</p>
+<h3 id="linktoarray-push-void">linkToArray.push() : void</h3>
+<p>Similar to <code>Array.push()</code> method, but performs purely functional update.</p>
+<h3 id="linktoarray-unshift-void">linkToArray.unshift() : void</h3>
+<p>Similar to <code>Array.unshift()</code> method, but performs purely functional update.</p>
+<h3 id="linktoarray-contains-element-">linkToArray.contains( element )</h3>
+<p>Creates the boolean link to the presence of value in array.</p>
+<p>Resulting link value is <code>true</code> whenever element is present in array, and <code>false</code> otherwise.
+Whenever resulting link is assigned with new value, it will flip <code>element</code> in the array.</p>
+<p>Useful for the large checkbox groups.</p>
 <h1 id="data-bound-controls">Data-bound controls</h1>
 <h2 id="ad-hoc-data-binding">Ad-hoc data binding</h2>
 <h3 id="-link-props-">{ ...link.props }</h3>
