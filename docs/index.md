@@ -8,6 +8,9 @@ toc_footers:
 
 includes:
   - tutorials
+  - tutorials/databinding
+  - tutorials/validation
+  - tutorials/selection
   - component
   - link
   - controls
