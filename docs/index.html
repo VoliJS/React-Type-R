@@ -106,17 +106,17 @@ and collections, describing the data structure of arbitrary complexity. All reco
 All class Component definitions must be preceeded with the <code>@define</code> decorator.</p>
 <pre><code class="highlight javascript"><span class="hljs-keyword">import</span> React, { define } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-mvx'</span>
 
-@define <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HelloApp</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
-    <span class="hljs-keyword">static</span> state = {
-        <span class="hljs-attr">count</span> : <span class="hljs-number">0</span>
+@define class HelloApp extends React.Component {
+    static state = {
+        count : 0
     };
 
     render(){
         <span class="hljs-keyword">const</span> { state } = <span class="hljs-keyword">this</span>;
         <span class="hljs-keyword">return</span> (
-            <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">h1</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{</span> () =&gt;</span> state.count++ }&gt;
+            <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">h1</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{</span> () =&gt;</span> state.count++ }&gt;
                 Hi there! { state.count }
-            <span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span></span>;
+            <span class="hljs-tag">&lt;/<span class="hljs-title">h1</span>&gt;</span>;</span>
         );
     }
 }
@@ -133,7 +133,7 @@ All class Component definitions must be preceeded with the <code>@define</code> 
 <h1 id="tutorials">Tutorials</h1>
 <h2 id="data-binding-and-forms">Data binding and forms</h2>
 <p>In this tutorial we will learn the state management and two-way data binding basics on the example of the simple user info editing form.</p>
-<p><img src="./form.png" alt="form"></p>
+<p><img src="images/form.png" alt="form"></p>
 <p>Our form will be the simple stateful component holding the state of the form in its local state, and for the purpose of the illustration storing its state in the browser&#39;s localStorage.</p>
 <h3 id="defining-the-stateful-component">Defining the stateful component</h3>
 <p>React-MVx extends React namespace and must be used instead of React. The most important class it exports is the modified <code>Component</code>.</p>
@@ -141,9 +141,9 @@ All class Component definitions must be preceeded with the <code>@define</code> 
 <pre><code class="highlight javascript"><span class="hljs-keyword">import</span> React, { define } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-mvx'</span>
 <span class="hljs-keyword">import</span> ReactDOM <span class="hljs-keyword">from</span> <span class="hljs-string">'react-dom'</span>
 
-@define <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Application</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
-    <span class="hljs-keyword">static</span> state = {
-        <span class="hljs-comment">/* state attributes definition */</span>
+@define class Application extends React.Component {
+    static state = {
+        /* state attributes definition */
     };
 
     render(){
@@ -153,7 +153,7 @@ All class Component definitions must be preceeded with the <code>@define</code> 
     }
 }
 
-ReactDOM.render( <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Application</span>/&gt;</span></span>, <span class="hljs-built_in">document</span>.getElementById( <span class="hljs-string">'react-application'</span> ) );
+ReactDOM.render( <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Application</span>/&gt;</span>, document.getElementById( 'react-application' ) );</span>
 </code></pre>
 <p>There are few differences to raw React so far:</p>
 <ul>
@@ -162,10 +162,10 @@ ReactDOM.render( <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-
 </ul>
 <h3 id="declaring-the-state">Declaring the state</h3>
 <p>In the simplest case like ours when the state is flat and consists of primitive types, the state definition looks like the plain object. We list state attributes accompanied with their default values.</p>
-<pre><code class="highlight javascript">    <span class="hljs-keyword">static</span> state = {
-        <span class="hljs-attr">name</span> : <span class="hljs-string">''</span>,
-        <span class="hljs-attr">email</span> : <span class="hljs-string">''</span>,
-        <span class="hljs-attr">isActive</span> : <span class="hljs-literal">true</span>
+<pre><code class="highlight javascript">    static state = {
+        name : <span class="hljs-string">''</span>,
+        email : <span class="hljs-string">''</span>,
+        isActive : <span class="hljs-literal">true</span>
     };
 </code></pre>
 <p>This declaration will lead to an automatic creation of the observable <code>component.state</code> object of the similar shape when the <code>Application</code> component will be mounted. No need to initialize the state in the constructor.</p>
@@ -178,20 +178,20 @@ ReactDOM.render( <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-
         <span class="hljs-keyword">const</span> { name, email, isActive } = <span class="hljs-keyword">this</span>.linkAll();
 
         <span class="hljs-keyword">return</span> (
-            &lt;form&gt;
-                &lt;label&gt;
-                    Name: &lt;input type="text" { ...name.props }/&gt;
-                &lt;/label&gt;
+            <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">form</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-title">label</span>&gt;</span>
+                    Name: <span class="hljs-tag">&lt;<span class="hljs-title">input</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"text"</span> { <span class="hljs-attribute">...name.props</span> }/&gt;</span>
+                <span class="hljs-tag">&lt;/<span class="hljs-title">label</span>&gt;</span>
 
-                &lt;label&gt;
-                    Email: &lt;input type="text" { ...email.props }/&gt;
-                &lt;/label&gt;
+                <span class="hljs-tag">&lt;<span class="hljs-title">label</span>&gt;</span>
+                    Email: <span class="hljs-tag">&lt;<span class="hljs-title">input</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"text"</span> { <span class="hljs-attribute">...email.props</span> }/&gt;</span>
+                <span class="hljs-tag">&lt;/<span class="hljs-title">label</span>&gt;</span>
 
-                &lt;label&gt;
-                    Is active: &lt;input type="checkbox" { ...isActive.props }/&gt;
-                &lt;/label&gt;
-            &lt;/form&gt;
-        );
+                <span class="hljs-tag">&lt;<span class="hljs-title">label</span>&gt;</span>
+                    Is active: <span class="hljs-tag">&lt;<span class="hljs-title">input</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"checkbox"</span> { <span class="hljs-attribute">...isActive.props</span> }/&gt;</span>
+                <span class="hljs-tag">&lt;/<span class="hljs-title">label</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-title">form</span>&gt;</span>
+        )</span>;
     }
 </code></pre>
 <p>At this stage, we have an editable form.</p>
@@ -199,27 +199,27 @@ ReactDOM.render( <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-
 <p>We would like to store the state of our form in the browser&#39;s localStorage. &quot;Save&quot; button must save the state, while &quot;Cancel&quot; must return the form to its default state. First of all, lets add these buttons:</p>
 <pre><code class="highlight javascript">    render(){
         ...
-        return (
-            <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">onSubmit</span>=<span class="hljs-string">{</span> <span class="hljs-attr">this.onSubmit</span> }&gt;</span>
+        <span class="hljs-keyword">return</span> (
+            <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">form</span> <span class="hljs-attribute">onSubmit</span>=<span class="hljs-value">{</span> <span class="hljs-attribute">this.onSubmit</span> }&gt;</span>
                 ...
-                <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"submit"</span>&gt;</span>Save<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-                <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"button"</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{</span> <span class="hljs-attr">this.onCancel</span> }&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"submit"</span>&gt;</span>Save<span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"button"</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{</span> <span class="hljs-attribute">this.onCancel</span> }&gt;</span>
                     Clear
-                <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-            <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span></span>
-        );
+                <span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-title">form</span>&gt;</span>
+        )</span>;
     }
 </code></pre>
 <p>We want &quot;Cancel&quot; button to set out state to its defaults, which is represented in the code quite literally:</p>
-<pre><code class="highlight javascript">    onCancel = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-keyword">this</span>.state.set( <span class="hljs-keyword">this</span>.state.defaults() );
+<pre><code class="highlight javascript">    onCancel = () =&gt; <span class="hljs-keyword">this</span>.state.set( <span class="hljs-keyword">this</span>.state.defaults() );
 </code></pre>
 <p>And the &quot;Save&quot; button must save the state to the localStorage. Good news is that <em>all the state in React-MVx is serializable by default</em>.</p>
-<pre><code class="highlight javascript">    onSubmit = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> localStorage.setItem( <span class="hljs-string">'users-form'</span>, <span class="hljs-built_in">JSON</span>.stringify( <span class="hljs-keyword">this</span>.state ) );
+<pre><code class="highlight javascript">    onSubmit = () =&gt; localStorage.setItem( <span class="hljs-string">'users-form'</span>, <span class="hljs-built_in">JSON</span>.stringify( <span class="hljs-keyword">this</span>.state ) );
 </code></pre>
 <p>Now, all we have to do is to restore the state on load. Which is done in the standard React&#39;s <code>componentWillMount</code> lifecycle hook.</p>
 <pre><code class="highlight javascript">    componentWillMount(){
         <span class="hljs-keyword">const</span> json = <span class="hljs-built_in">JSON</span>.parse( localStorage.getItem( <span class="hljs-string">'users-form'</span> ) || <span class="hljs-string">'{}'</span> );
-        <span class="hljs-keyword">this</span>.state.set( json, { <span class="hljs-attr">parse</span> : <span class="hljs-literal">true</span> } );
+        <span class="hljs-keyword">this</span>.state.set( json, { parse : <span class="hljs-literal">true</span> } );
     }
 </code></pre>
 <p>That&#39;s really it. Here are the complete <a href="https://github.com/gaperton/react-mvx-examples/blob/master/src/form.jsx">sources</a> of our example, and here you can see the example <a href="https://gaperton.github.io/react-mvx-examples/dist/form.html">working</a>.</p>
@@ -241,24 +241,252 @@ ReactDOM.render( <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-
 <td>record representing the component state</td>
 </tr>
 <tr>
-<td>record.set( data, options? )</td>
-<td></td>
+<td>recordOrCollection.set( data, options? )</td>
+<td>bulk update the record or collection</td>
 </tr>
 <tr>
-<td>record.toJSON()</td>
-<td></td>
+<td>recordOrCollection.toJSON()</td>
+<td>convert an object to JSON.</td>
 </tr>
 <tr>
 <td>component.linkAll()</td>
-<td></td>
+<td>Create links to all state attributes. Same as <code>component.state.linkAll()</code></td>
 </tr>
 <tr>
 <td>link.props</td>
+<td>Convert the link to the standard pair of <code>value</code>/<code>onChange</code> props.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="form-validation">Form Validation</h2>
+<p>In this tutorial, we will add input validation to the user editing form from the <a href="01_Data_binding_and_forms.md">previous example</a>. That&#39;s the client-side &quot;as-you-type&quot; validation preventing the user from submitting invalid data while giving him hints.</p>
+<p><img src="images/validation.png" alt="Validated form"></p>
+<h3 id="state-definition-and-validation-checks">State definition and validation checks</h3>
+<p>All state attributes in React-MVx has associated run-time types and the metadata. The general form of an attribute definition is <code>Constructor.value( defaultValue )</code>. When the <code>defaultValue</code> is used as an attribute definition (as it was in <a href="01_Data_binding_and_forms.md">previous example</a>), its type (Constructor) is taken from the value.</p>
+<p><code>.value( defaultValue )</code> can be omitted as well. If an attribute definition is a function, it assumed to be the attribute&#39;s <code>Constructor</code>. Therefore, the following state definition is equivalent to one in the example.</p>
+<pre><code class="highlight javascript">@define <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Application</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+    static state = {
+        name : <span class="hljs-built_in">String</span>, <span class="hljs-comment">// same as ''</span>
+        email : <span class="hljs-built_in">String</span>, <span class="hljs-comment">// same as ''</span>
+        isActive : <span class="hljs-built_in">Boolean</span>.value( <span class="hljs-literal">true</span> ) <span class="hljs-comment">// same as true</span>
+    };
+    ...
+}
+</code></pre>
+<p>This is important because validation checks are the part of the attribute definition. Which is cool, as it allows us to make custom attribute types with all of the validation checks encapsulated. Let&#39;s do this for the email.</p>
+<p>Validator itself is the function taking the attribute&#39;s value and returning <code>true</code> whenever it is valid.</p>
+<pre><code class="highlight javascript"><span class="hljs-comment">// Something simple, just for illustration purposes.</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isValidEmail</span>(<span class="hljs-params"> x </span>)</span>{
+    <span class="hljs-keyword">return</span> !x || x.indexOf(<span class="hljs-string">'@'</span>) &gt;= <span class="hljs-number">0</span>;
+}
+</code></pre>
+<p>Then, we need to attach the validator to the attribute definition. And we&#39;ve got the Email attribute type which can be used anywhere across the system.</p>
+<pre><code class="highlight javascript"><span class="hljs-keyword">const</span> Email = <span class="hljs-built_in">String</span>.has.check( isValidEmail, <span class="hljs-string">'Invalid email'</span> );
+</code></pre>
+<p>Now we have all we need to define our state. We will use the built-in validation check <code>isRequired</code> which fails at empty values. This check is special because it is always executed first. Other <code>checks()</code> predicates can be chained and are executed in sequence.</p>
+<pre><code class="highlight javascript">@define <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Application</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+    static state = {
+        name : <span class="hljs-built_in">String</span>.isRequired,
+        email : Email.isRequired,
+        isActive : <span class="hljs-literal">true</span>
+    };
+    ...
+}
+</code></pre>
+<h3 id="displaying-validation-errors">Displaying validation errors</h3>
+<p>In React-MVx, the validation happens transparently and automatically. When you create the link, the attribute&#39;s validation error is accessible as <code>link.error</code>. Nothing special needs to be done to <em>trigger</em> the validation, all you have to do is to display the error.</p>
+<pre><code class="highlight javascript">    render(){
+        <span class="hljs-keyword">const</span> { name, email, isActive } = <span class="hljs-keyword">this</span>.linkAll();
+        <span class="hljs-keyword">return</span> (
+            <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">form</span> <span class="hljs-attribute">onSubmit</span>=<span class="hljs-value">{</span> <span class="hljs-attribute">this.onSubmit</span> }&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-title">label</span>&gt;</span> Name: 
+                    <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"validated-control"</span>&gt;</span>
+                        <span class="hljs-tag">&lt;<span class="hljs-title">input</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"text"</span> { <span class="hljs-attribute">...name.props</span>} /&gt;</span>
+                        { name.error &amp;&amp; <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"error"</span>&gt;</span>{ name.error }<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span> }
+                    <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+                <span class="hljs-tag">&lt;/<span class="hljs-title">label</span>&gt;</span>
+                ...
+            <span class="hljs-tag">&lt;/<span class="hljs-title">form</span>&gt;</span>
+        )</span>;
+    }
+</code></pre>
+<p>And we would like to have the Save button disabled in case if the state is not valid for any reason:</p>
+<pre><code class="highlight javascript">...
+&lt;button type="submit" disabled={!this.state.isValid()}&gt;
+    Save
+&lt;/button&gt;
+...
+</code></pre>
+<p>That&#39;s it. There&#39;s one more optional but important thing left to do, though.</p>
+<h3 id="linked-ui-controls">Linked UI controls</h3>
+<p>The final touch is to wrap the form&#39;s input displaying the validation error to the dedicated control, taking the <code>link</code> as an argument.</p>
+<p>We define our own reusable <code>Input</code> form element which displays the validation error in the way we want:</p>
+<pre><code class="highlight javascript"><span class="hljs-keyword">const</span> Input = ({ link, ...props }) =&gt; (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"validated-control"</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">input</span> {<span class="hljs-attribute">...props</span>} {<span class="hljs-attribute">...link.props</span>} /&gt;</span>
+        { link.error &amp;&amp; <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"error"</span>&gt;</span>{ link.error }<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span> }
+    <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+)</span>;
+</code></pre>
+<p>With that change, our <code>render()</code> method starts looking like this:</p>
+<pre><code class="highlight javascript">render(){
+    <span class="hljs-comment">// Link the state...</span>
+    <span class="hljs-keyword">const</span> { name, email, isActive } = <span class="hljs-keyword">this</span>.linkAll();
+    <span class="hljs-keyword">return</span> (
+        <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">form</span> <span class="hljs-attribute">onSubmit</span>=<span class="hljs-value">{</span> <span class="hljs-attribute">this.onSubmit</span> }&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-title">label</span>&gt;</span>
+                Name: <span class="hljs-tag">&lt;<span class="hljs-title">Input</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"text"</span> <span class="hljs-attribute">link</span>=<span class="hljs-value">{name}</span>/&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-title">label</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-title">label</span>&gt;</span>
+                Email: <span class="hljs-tag">&lt;<span class="hljs-title">Input</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"text"</span> <span class="hljs-attribute">link</span>=<span class="hljs-value">{email}</span>/&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-title">label</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-title">label</span>&gt;</span>
+                Is active: <span class="hljs-tag">&lt;<span class="hljs-title">input</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"checkbox"</span> {<span class="hljs-attribute">...isActive.props</span>}/&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-title">label</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"submit"</span> <span class="hljs-attribute">disabled</span>=<span class="hljs-value">{!this.state.isValid()}</span>&gt;</span>
+                Save
+            <span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"button"</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.onCancel}</span>&gt;</span>
+                Clear
+            <span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-title">form</span>&gt;</span>
+    )</span>;
+}
+</code></pre>
+<p>As you can see, the validation does not affect the markup in React-MVx. Thanks to the <em>links</em>, which conveniently transport the validation error from the place where it occurs to the place where it&#39;s consumed.</p>
+<p>Here are the complete <a href="https://github.com/gaperton/react-mvx-examples/blob/master/src/validation.jsx">sources</a>, and here you can see the example <a href="https://gaperton.github.io/react-mvx-examples/dist/validation.html">working</a>.</p>
+<h3 id="api-used-in-the-example">API used in the example</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>attrDef</code> : Type.value( defaultValue )</td>
+<td>The general form of attribute definition where the <code>Type</code> is the constructor function.</td>
+</tr>
+<tr>
+<td><code>attrDef</code> : Type</td>
+<td>Attribute with a given type and the default value <code>new Type()</code> or <code>Type()</code> for primitives.</td>
+</tr>
+<tr>
+<td><code>attrDef</code> : defaultValue</td>
+<td>Attribute with the given default value and the type inferred from the value.</td>
+</tr>
+<tr>
+<td><code>attrDef</code> : Type.has.check( predicate, errorMsg? )</td>
+<td>Attribute-level validator.</td>
+</tr>
+<tr>
+<td><code>attrDef</code> : Type.isRequired</td>
+<td>The special case of attribute-level check cutting out empty values.</td>
+</tr>
+<tr>
+<td>record.isValid()</td>
+<td>Returns <code>true</code> whenever an object and its aggregation tree is valid.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="managing-selection-in-lists">Managing selection in lists</h2>
+<p>State of the lists is represented with Type-R&#39;s <code>Collection</code> type. Every <code>Record</code> class has the automatically created collection constructor which is referenced with <code>Record.Collection</code>.</p>
+<h3 id="single-item-selection">Single item selection</h3>
+<p>For the purpose of clarity we split the example into two components. Top-level holding the state, and the stateless component which will render the list.</p>
+<pre><code class="highlight javascript">@define <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TopComponent</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+    static attributes = {
+        items : User.Collection, <span class="hljs-comment">// aggregated collection of users</span>
+        selected : User.shared <span class="hljs-comment">// reference to the record of this.users</span>
+    };
+
+    render(){
+        <span class="hljs-keyword">const</span> { state } = <span class="hljs-keyword">this</span>;
+        <span class="hljs-comment">// List must change the selection, thus it is passed as link.</span>
+        <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">List</span> <span class="hljs-attribute">items</span>=<span class="hljs-value">{</span> <span class="hljs-attribute">state.items</span> }
+                     <span class="hljs-attribute">selectedLink</span>=<span class="hljs-value">{</span> <span class="hljs-attribute">state.linkAt</span>( '<span class="hljs-attribute">selected</span>' ) } /&gt;</span>;</span>
+    }
+}
+</code></pre>
+<p>In Type-R, all the state is represented as the set of <em>aggregation trees</em>. By default, each nested record or collection is <em>aggregated</em> and behave as an integral part of the owner. It means, that it&#39;s created, copied, serialized, and validated recursively when it happens to its owner. And aggregation implies that there must be just the single owner, which is fine when the state has the proper tree structure.</p>
+<p>Here, however, the state is not the tree. <code>selected</code> points to the elements of <code>items</code> collection, which would cause an aggregation error if we wouldn&#39;t marked is as <code>User.shared</code>. Now Type-R knows that <code>selected</code> is not an aggregation, but an association. Thus it can properly clone and dispose the state.</p>
+<p><img src="images/selected-state.png" alt="selected state"></p>
+<p>Our list component will be pure. Since it has to modify the selection on item&#39;s click, it needs to take the link to the selected element rather than the value.</p>
+<pre><code class="highlight jsx">const List = ({ items, selectedLink }) =&gt; (
+    <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"list"</span>&gt;</span>
+        { items.map( item =&gt; (
+            <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">key</span>=<span class="hljs-value">{</span> <span class="hljs-attribute">item.cid</span> }
+                 <span class="hljs-attribute">className</span>=<span class="hljs-value">{</span> <span class="hljs-attribute">item</span> =<span class="hljs-value">==</span> <span class="hljs-attribute">selectedLink.value</span> ? '<span class="hljs-attribute">selected</span>' <span class="hljs-attribute">:</span> '' }
+                 <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{</span> () =&gt;</span> selectedLink.set( item ) }&gt;
+                { item.name }
+            <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+        )}
+    <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+);
+</code></pre>
+<p>Every object in Type-R has <code>cid</code>. It&#39;s the unique client-only id generated upon object&#39;s creation. We used it here as <code>key</code> prop inside of map, so the React can handle items removal and insertions properly.</p>
+<h3 id="multiple-items-selection">Multiple items selection</h3>
+<p>The state of multi-selection is represented with the collection, but we can&#39;t just use <code>User.Collection</code> because the state will aggregate selected items twice. <code>Collection.Refs</code> is the type of the collection which does not aggregate its members.</p>
+<pre><code class="highlight javascript">@define <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TopComponent</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+    static attributes = {
+        items : User.Collection,
+        selected : User.Collection.Refs 
+    };
+
+    render(){
+        <span class="hljs-keyword">const</span> { state } = <span class="hljs-keyword">this</span>;
+        <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">List</span> <span class="hljs-attribute">items</span>=<span class="hljs-value">{</span> <span class="hljs-attribute">state.items</span> }
+                     <span class="hljs-attribute">selected</span>=<span class="hljs-value">{</span> <span class="hljs-attribute">state.selected</span> } /&gt;</span>;</span>
+    }
+}
+</code></pre>
+<p><code>Collection.Refs</code> is <em>non-aggregating collection</em>, which doesn&#39;t attempt to take an ownership on its elements. Whenever the state will be cloned <code>selected</code> collection itself will be shallow cloned, while the <code>items</code> collection will be deeply cloned.</p>
+<p><img src="images/multiselect-state.png" alt="multiselect state"></p>
+<p>In Type-R, the nested records and collections are mutable and deeply observable. <code>state.selected</code> is an object, so we can just pass it to the List component as it is. Whenever it will be updated, the change will be noticed by the TopComponent which will cause the render.</p>
+<pre><code class="highlight javascript">const List = ({ items, selected }) =&gt; (
+    &lt;div className="list"&gt;
+        { items.map( item =&gt; (
+            &lt;div key={ item.cid }
+                 className={ selected.get( item ) ? 'selected' : '' }
+                 onClick={ () =&gt; selected.toggle( item ) }&gt;
+                { item.name }
+            &lt;/div&gt;
+        )}
+    &lt;/div&gt;
+);
+</code></pre>
+<h3 id="making-the-state-serializable">Making the state serializable</h3>
+<p><code>User.shared</code> and <code>Collection.Refs</code> are not present in JSON
+when the <code>state.toJSON()</code> is called. They are <em>non-serializable</em> references, and it&#39;s &#39;s okay for the UI state in the majority of cases.</p>
+<p>You need to use <code>Record.from</code> and <code>Collection.subsetOf</code> attribute definitions to make the serializable. Both of them take the reference to the master collection which is used to restore elements from their ids. The reference is the dot-separated path to the collection taken relative to the record&#39;s <code>this</code>.</p>
+<aside class="notice">
+id-references notation is more informative to the reader and should be preferred to `shared` and `Refs` anywhere where it's possible.
+</aside>
+
+<pre><code class="highlight javascript">static attributes = {
+    items : User.Collection,
+    selected : User.from( <span class="hljs-string">'items'</span> ) <span class="hljs-comment">// as an id of the record from this.items collection in JSON</span>
+};
+</code></pre>
+<pre><code class="highlight javascript">static attributes = {
+    items : User.Collection,
+    selected : User.Collection.subsetOf( <span class="hljs-string">'items'</span> ) <span class="hljs-comment">// as array of ids of records from this.items in JSON</span>
+};
+</code></pre>
+<h3 id="api-used-in-the-example">API used in the example</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
 <td></td>
 </tr>
 </tbody>
 </table>
-<h2 id="input-validation">Input validation</h2>
 <h2 id="editable-lists">Editable lists</h2>
 <h2 id="paging">Paging</h2>
 <p>TBD</p>
@@ -272,29 +500,29 @@ All class Component definitions must be preceeded with the <code>@define</code> 
 <p>All features of the Component are controlled through the unified property and attribute declarations.</p>
 <pre><code class="highlight javascript"><span class="hljs-keyword">import</span> React, { define } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-mvx'</span>
 
-@define <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Hello</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
-    <span class="hljs-keyword">static</span> props = { <span class="hljs-comment">// instead of `propTypes` and `defaultProps`</span>
-        propName : <span class="hljs-string">`propDef`</span>,
+@define class Hello extends React.Component {
+    static props = { // instead of `propTypes` and `defaultProps`
+        propName : `propDef`,
         ...
     }
 
-    <span class="hljs-keyword">static</span> context = { <span class="hljs-comment">// instead of `contextTypes`</span>
-        propName : <span class="hljs-string">`propDef`</span>,
+    static context = { // instead of `contextTypes`
+        propName : `propDef`,
         ...
     }
 
-    <span class="hljs-keyword">static</span> childContext = { <span class="hljs-comment">// instead of `childContextTypes`</span>
-        propName : <span class="hljs-string">`propDef`</span>,
+    static childContext = { // instead of `childContextTypes`
+        propName : `propDef`,
         ...
     }
 
-    <span class="hljs-keyword">static</span> state = { <span class="hljs-comment">// instead of "this.state = " in the constructor.</span>
-        attrName : <span class="hljs-string">`attrDef`</span>,
+    static state = { // instead of <span class="hljs-string">"this.state = "</span> in the constructor.
+        attrName : `attrDef`,
         ...
     }
 
-    <span class="hljs-keyword">static</span> store = { <span class="hljs-comment">// store</span>
-        attrName : <span class="hljs-string">`attrDef`</span>,
+    static store = { // store
+        attrName : `attrDef`,
         ...
     }
 
@@ -439,9 +667,9 @@ All class Component definitions must be preceeded with the <code>@define</code> 
 <p>Declare component props. Declaration is an object </p>
 <pre><code class="highlight javascript"><span class="hljs-keyword">import</span> React, { define } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-mvx'</span>
 
-@define <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PropsDemo</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
-    <span class="hljs-keyword">static</span> props = {
-        <span class="hljs-attr">name</span> : Declaration,
+@define class PropsDemo extends React.Component {
+    static props = {
+        name : Declaration,
         ...
     }
 }
@@ -454,31 +682,31 @@ All class Component definitions must be preceeded with the <code>@define</code> 
 <p>Checks if component prop is an instance of the <code>Constructor</code> and puts the warning to the console if the prop type is not compatible.</p>
 <h3 id="-propdef-name-constructor-isrequired"><code>propDef</code> name : Constructor.isRequired</h3>
 <p>Mark property as required.</p>
-<pre><code class="highlight javascript"><span class="hljs-keyword">import</span> React, { define } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-mvx'</span>
-@define <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PropsDemo</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
-    <span class="hljs-keyword">static</span> props = {
-        <span class="hljs-comment">// Simple form of annotation is just the constructor function designating the type.</span>
-        optionalArray: <span class="hljs-built_in">Array</span>,
-        <span class="hljs-attr">optionalBool</span>: <span class="hljs-built_in">Boolean</span>,
-        <span class="hljs-attr">optionalFunc</span>: <span class="hljs-built_in">Function</span>,
-        <span class="hljs-attr">optionalNumber</span>: <span class="hljs-built_in">Number</span>,
-        <span class="hljs-attr">optionalObject</span>: <span class="hljs-built_in">Object</span>,
-        <span class="hljs-attr">optionalString</span>: <span class="hljs-built_in">String</span>,
-        <span class="hljs-attr">optionalSymbol</span>: <span class="hljs-built_in">Symbol</span>,   
+<pre><code class="highlight javascript">import React, { define } from &#39;react-mvx&#39;
+@define class PropsDemo extends React.Component {
+    static props = {
+        // Simple form of annotation is just the constructor function designating the type.
+        optionalArray: Array,
+        optionalBool: Boolean,
+        optionalFunc: Function,
+        optionalNumber: Number,
+        optionalObject: Object,
+        optionalString: String,
+        optionalSymbol: Symbol,   
 
-        <span class="hljs-comment">// Anything that can be rendered: numbers, strings, elements or an array</span>
-        <span class="hljs-comment">// (or fragment) containing these types.</span>
+        // Anything that can be rendered: numbers, strings, elements or an array
+        // (or fragment) containing these types.
         optionalNode: React.Node,
 
-        <span class="hljs-comment">// A React element.</span>
+        // A React element.
         optionalElement: React.Element,
 
-        <span class="hljs-comment">// You can also declare that a prop is an instance of a class.</span>
+        // You can also declare that a prop is an instance of a class.
         optionalMessage: Message,
 
-        <span class="hljs-comment">// You can chain any of the above with `isRequired` to make sure a warning</span>
-        <span class="hljs-comment">// is shown if the prop isn't provided.</span>
-        requiredFunction : <span class="hljs-built_in">Function</span>.isRequired
+        // You can chain any of the above with `isRequired` to make sure a warning
+        // is shown if the prop isn&#39;t provided.
+        requiredFunction : Function.isRequired
     };
     ...
 }
@@ -490,10 +718,10 @@ All class Component definitions must be preceeded with the <code>@define</code> 
 <p>Any function in props annotation is treated as a constructor. Thus, <code>Function.value( defaultValue )</code> must be used to specify the defaults for functions.</p>
 <pre><code class="highlight javascript"><span class="hljs-keyword">import</span> React, { define } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-mvx'</span>
 
-@define <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PropsDemo</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
-    <span class="hljs-keyword">static</span> props = {
-        <span class="hljs-attr">withDefault</span> : <span class="hljs-built_in">String</span>.value( <span class="hljs-string">'defaultValue'</span> ),
-        <span class="hljs-attr">anotherDefault</span> : <span class="hljs-string">'defaultValue'</span>
+@define class PropsDemo extends React.Component {
+    static props = {
+        withDefault : String.value( <span class="hljs-string">'defaultValue'</span> ),
+        anotherDefault : <span class="hljs-string">'defaultValue'</span>
     }
 }
 </code></pre>
@@ -504,14 +732,14 @@ All class Component definitions must be preceeded with the <code>@define</code> 
 Watcher is executed in the context of the component.</p>
 <pre><code class="highlight javascript"><span class="hljs-keyword">import</span> React, { define } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-mvx'</span>
 
-@define <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PropsDemo</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
-    <span class="hljs-keyword">static</span> props = {
-        <span class="hljs-attr">first</span> : <span class="hljs-built_in">String</span>.has.watcher( <span class="hljs-string">'onFirstChange'</span> ),
-        <span class="hljs-attr">second</span> : <span class="hljs-built_in">Number</span>.has.watcher( <span class="hljs-function"><span class="hljs-params">second</span> =&gt;</span> <span class="hljs-built_in">console</span>.log( <span class="hljs-string">'Received new prop:'</span>, second ) )
+@define class PropsDemo extends React.Component {
+    static props = {
+        first : String.has.watcher( <span class="hljs-string">'onFirstChange'</span> ),
+        second : Number.has.watcher( second =&gt; console.log( <span class="hljs-string">'Received new prop:'</span>, second ) )
     }
 
     onFirstChange( newValue, name ){
-        <span class="hljs-built_in">console</span>.log( <span class="hljs-string">'First prop is about to change:'</span>, newValue );
+        console.log( <span class="hljs-string">'First prop is about to change:'</span>, newValue );
     }
 }
 </code></pre>
@@ -522,11 +750,11 @@ Watcher is executed in the context of the component.</p>
 <pre><code class="highlight javascript"><span class="hljs-keyword">import</span> React, { define } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-mvx'</span>
 <span class="hljs-keyword">import</span> { Record } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-mvx'</span>
 
-@define <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PropsDemo</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
-    <span class="hljs-keyword">static</span> props = {
-        <span class="hljs-comment">// Render on every change</span>
-        trackInnerChanges : Record.has.changeEvents( <span class="hljs-literal">true</span> ),
-        <span class="hljs-comment">// Render when record is added to or removed from the collection</span>
+@define class PropsDemo extends React.Component {
+    static props = {
+        // Render on every change
+        trackInnerChanges : Record.has.changeEvents( true ),
+        // Render when record is added to or removed <span class="hljs-keyword">from</span> the collection
         anotherDefault : Collection.has.changeEvents( <span class="hljs-string">'add remove'</span> )
     }
 }
@@ -550,7 +778,7 @@ All changed inside of the state record are observed, and the component is update
 </code></pre><p>Refer to the Record documentation for the complete list of methods.</p>
 <h3 id="component-transaction-fun-">component.transaction( fun )</h3>
 <p>Group the sequence of state (and props) updates in the single transaction leading to single UI update.</p>
-<pre><code><span class="hljs-keyword">this</span>.transaction( <span class="hljs-function"><span class="hljs-params">state</span> =&gt;</span> {
+<pre><code><span class="hljs-keyword">this</span>.transaction( state =&gt; {
     state.a++;
     state.b++;
     <span class="hljs-keyword">this</span>.props.collection.reset();
@@ -611,15 +839,15 @@ UI controls from the data representation in the state container and from the sta
 Record is automatically validated upon the links creation, and link encloses the validation error
 related to the particuler attribute.</p>
 <pre><code class="highlight javascript"><span class="hljs-comment">// Data bound control for the semantic form markup</span>
-<span class="hljs-keyword">const</span> Input = <span class="hljs-function">(<span class="hljs-params">{ valueLink, ...props }</span>) =&gt;</span> (
-    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">{</span>`<span class="hljs-attr">form-control</span> ${ <span class="hljs-attr">valueLink.error</span> ? '<span class="hljs-attr">error</span>' <span class="hljs-attr">:</span> '' }`}&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-name">input</span> {<span class="hljs-attr">...props</span>}
-            <span class="hljs-attr">value</span>=<span class="hljs-string">{</span> <span class="hljs-attr">valueLink.value</span> }
-            <span class="hljs-attr">onChange</span>=<span class="hljs-string">{</span> <span class="hljs-attr">e</span> =&gt;</span> valueLink.set( e.target.value ) }
+<span class="hljs-keyword">const</span> Input = ({ valueLink, ...props }) =&gt; (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">{`form-control</span> ${ <span class="hljs-attribute">valueLink.error</span> ? '<span class="hljs-attribute">error</span>' <span class="hljs-attribute">:</span> '' }`}&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">input</span> {<span class="hljs-attribute">...props</span>}
+            <span class="hljs-attribute">value</span>=<span class="hljs-value">{</span> <span class="hljs-attribute">valueLink.value</span> }
+            <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{</span> <span class="hljs-attribute">e</span> =&gt;</span> valueLink.set( e.target.value ) }
         /&gt;
-        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">"validation-error"</span>&gt;</span>{ valueLink.error || '' }<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-);</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"validation-error"</span>&gt;</span>{ valueLink.error || '' }<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+)</span>;
 </code></pre>
 <p>Links makes it possible to create the semantic markup for the form elements, encapsulating the
 all the required styles and validation error indication.</p>
@@ -627,9 +855,9 @@ all the required styles and validation error indication.</p>
 <p>Here are the most important link members. All the link members are read-only and should not be modified directly.</p>
 <pre><code class="highlight javascript"><span class="hljs-comment">// Link's shape</span>
 {
-    <span class="hljs-attr">value</span> : <span class="hljs-comment">/* the value */</span>,
+    value : <span class="hljs-comment">/* the value */</span>,
     set( newValue ){ <span class="hljs-comment">/* the function to change it */</span>},
-    <span class="hljs-attr">error</span> : <span class="hljs-comment">/* validation error */</span>
+    error : <span class="hljs-comment">/* validation error */</span>
 }
 </code></pre>
 <h3 id="link-value">link.value</h3>
@@ -644,7 +872,7 @@ validators from <code>.has.check()</code> attributes annotations.</p>
 </code></pre>
 <h3 id="link-update-prevvalue-newvalue-">link.update( prevValue =&gt; newValue )</h3>
 <p>Update link value using the given value transform function.</p>
-<pre><code class="highlight javascript">&lt;button onClick={ () =&gt; boolLink.update( <span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> !x ) } /&gt;
+<pre><code class="highlight javascript">&lt;button onClick={ () =&gt; boolLink.update( x =&gt; !x ) } /&gt;
 </code></pre>
 <h2 id="create">Create</h2>
 <p>All records and collections may create links to its elements.
@@ -678,7 +906,7 @@ Component has the shorthand methods to create links to its state record elements
 <p>Create boolean equality link which value is <code>true</code> whenever <code>link.value === value</code>, and <code>false</code> otherwise.</p>
 <p>When an equality link is assigned with <code>true</code> the parent link value is set with <code>value</code>, and with <code>null</code> otherwise.</p>
 <pre><code class="highlight javascript">&lt;Checkbox checkedLink={ stringLink.equals( <span class="hljs-string">'optionX'</span> ) } /&gt;
-<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Checkbox</span> <span class="hljs-attr">checkedLink</span>=<span class="hljs-string">{</span> <span class="hljs-attr">stringLink.equals</span>( '<span class="hljs-attr">optionY</span>' ) } /&gt;</span></span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Checkbox</span> <span class="hljs-attribute">checkedLink</span>=<span class="hljs-value">{</span> <span class="hljs-attribute">stringLink.equals</span>( '<span class="hljs-attribute">optionY</span>' ) } /&gt;</span></span>
 </code></pre>
 <p>Useful for radio groups.</p>
 <h3 id="link-props">link.props</h3>
@@ -691,10 +919,10 @@ Component has the shorthand methods to create links to its state record elements
 When it&#39;s called, <code>event</code> and link <code>value</code> are passes as transform parameters, and link will be updated 
 with returned value.</p>
 <pre><code class="highlight javascript"><span class="hljs-comment">// simple click event handler...</span>
-&lt;button onClick={ boolLink.action( <span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> !x ) } /&gt;
+&lt;button onClick={ boolLink.action( x =&gt; !x ) } /&gt;
 
 <span class="hljs-comment">// manual binding to input control:</span>
-<span class="hljs-keyword">const</span> setValue = <span class="hljs-function">(<span class="hljs-params"> x, e </span>) =&gt;</span> e.target.value;
+<span class="hljs-keyword">const</span> setValue = ( x, e ) =&gt; e.target.value;
 ...
 &lt;input  value={ link.value }
         onChange={ link.action( setValue ) } /&gt;
@@ -722,21 +950,21 @@ container (array or object).</p>
 Mapping function receives <em>at-link</em> to the corresponding element.
 Whenever it returns <code>undefined</code>, the corresponding element is be skipped.</p>
 <pre><code class="highlight javascript"><span class="hljs-comment">// Render the linked array...</span>
-<span class="hljs-keyword">var</span> list = stringArrayLink.map( <span class="hljs-function">(<span class="hljs-params"> itemLink, index </span>) =&gt;</span> {
+<span class="hljs-keyword">var</span> list = stringArrayLink.map( ( itemLink, index ) =&gt; {
     <span class="hljs-keyword">if</span>( itemLink.value ){ <span class="hljs-comment">// Skip empty elements</span>
         <span class="hljs-keyword">return</span> (
-            <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{</span> <span class="hljs-attr">index</span> }&gt;</span>
-                <span class="hljs-tag">&lt;<span class="hljs-name">Input</span> <span class="hljs-attr">valueLink</span>=<span class="hljs-string">{</span> <span class="hljs-attr">itemLink</span> } /&gt;</span>
-            <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-        );
+            <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">key</span>=<span class="hljs-value">{</span> <span class="hljs-attribute">index</span> }&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-title">Input</span> <span class="hljs-attribute">valueLink</span>=<span class="hljs-value">{</span> <span class="hljs-attribute">itemLink</span> } /&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+        )</span>;
     }
-});</span>
+});
 </code></pre>
 <h3 id="link-update-clonedobject-modifiedobject-">link.update( clonedObject =&gt; modifiedObject )</h3>
 <p>Update linked object or array.</p>
 <p>Plain objects and arrays are shallow copied already, thus it&#39;s safe just to update the value in place.</p>
 <pre><code class="highlight javascript"><span class="hljs-comment">// Update the linked object</span>
-&lt;button onClick={ () =&gt; objLink.update( <span class="hljs-function"><span class="hljs-params">obj</span> =&gt;</span> {
+&lt;button onClick={ () =&gt; objLink.update( obj =&gt; {
                                 obj.a = <span class="hljs-number">1</span>;
                                 <span class="hljs-keyword">return</span> obj;
                             }) } /&gt;
@@ -774,7 +1002,7 @@ Whenever resulting link is assigned with new value, it will flip <code>element</
 <p>Bind input or textarea to the linked string:</p>
 <pre><code class="highlight javascript"><span class="hljs-comment">// String</span>
 &lt;input type=<span class="hljs-string">"text"</span> {...link.props} /&gt;
-<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">textarea</span> {<span class="hljs-attr">...link.props</span>} /&gt;</span></span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">textarea</span> {<span class="hljs-attribute">...link.props</span>} /&gt;</span></span>
 </code></pre>
 <h3 id="checkbox">checkbox</h3>
 <p>Bind the checkbox to the linked boolean:</p>
@@ -792,15 +1020,15 @@ Whenever resulting link is assigned with new value, it will flip <code>element</
 <p>Bind radio group to the single linked value:</p>
 <pre><code class="highlight javascript"><span class="hljs-comment">// Radio</span>
 &lt;input type=<span class="hljs-string">"radio"</span> {...link.equals( <span class="hljs-string">'optionA'</span> ).props } /&gt;
-<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"radio"</span> {<span class="hljs-attr">...link.equals</span>( '<span class="hljs-attr">optionB</span>' )<span class="hljs-attr">.props</span> } /&gt;</span></span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">input</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"radio"</span> {<span class="hljs-attribute">...link.equals</span>( '<span class="hljs-attribute">optionB</span>' )<span class="hljs-attribute">.props</span> } /&gt;</span></span>
 </code></pre>
 <h3 id="select-list">select list</h3>
 <p>Bind select list to the linked value:</p>
-<pre><code class="highlight javascript">// Select
+<pre><code class="highlight javascript"><span class="hljs-comment">// Select</span>
 &lt;select {...link.props}&gt;
-    &lt;option value="optionA"&gt; A &lt;/option&gt;
-    &lt;option value="optionB"&gt; B &lt;/option&gt;
-&lt;/select&gt;
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">option</span> <span class="hljs-attribute">value</span>=<span class="hljs-value">"optionA"</span>&gt;</span> A <span class="hljs-tag">&lt;/<span class="hljs-title">option</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">option</span> <span class="hljs-attribute">value</span>=<span class="hljs-value">"optionB"</span>&gt;</span> B <span class="hljs-tag">&lt;/<span class="hljs-title">option</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-title">select</span>&gt;</span></span>
 </code></pre>
 <h2 id="linked-ui-controls">Linked UI controls</h2>
 <p><em>Linked control</em> is the custom React component taking the <code>link</code> property instead of <code>value</code>/<code>onChange</code> props pair.
@@ -808,19 +1036,19 @@ It uses the link to extract the value and validation error, and to modify the va
 <p>Linked controls makes it possible to create the semantic form markup encapsulating inline validation
 and form layout styling. Not just form controls, but the most of the UI can benefit of this technique.</p>
 <pre><code class="highlight javascript"><span class="hljs-comment">// Custom data-bound control</span>
-<span class="hljs-keyword">const</span> Input = <span class="hljs-function">(<span class="hljs-params">{ link, ...props }</span>) =&gt;</span> (
-    &lt;div className={`form-row ${ link.error ? 'has-error' : '' } `}&gt;
-        &lt;input type="text" {...props} { ...link.props } /&gt;
-        &lt;div className="error-placeholder"&gt;{ link.error || '' } &lt;/div&gt;
-    &lt;/div&gt;
-);
+<span class="hljs-keyword">const</span> Input = ({ link, ...props }) =&gt; (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">{`form-row</span> ${ <span class="hljs-attribute">link.error</span> ? '<span class="hljs-attribute">has-error</span>' <span class="hljs-attribute">:</span> '' } `}&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">input</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"text"</span> {<span class="hljs-attribute">...props</span>} { <span class="hljs-attribute">...link.props</span> } /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"error-placeholder"</span>&gt;</span>{ link.error || '' } <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+)</span>;
 
-// Another simple data bound control
-const Input = ({ link, ...props }) =&gt; (
-    &lt;input {...props}
-            value={ link.value }
-            onChange={ e =&gt; link.set( e.target.value ) } /&gt;
-);
+<span class="hljs-comment">// Another simple data bound control</span>
+<span class="hljs-keyword">const</span> Input = ({ link, ...props }) =&gt; (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">input</span> {<span class="hljs-attribute">...props</span>}
+            <span class="hljs-attribute">value</span>=<span class="hljs-value">{</span> <span class="hljs-attribute">link.value</span> }
+            <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{</span> <span class="hljs-attribute">e</span> =&gt;</span> link.set( e.target.value ) } /&gt;
+)</span>;
 </code></pre>
 <p>There are the set of pre-defined linked UI controls in <code>react-mvx/tags</code> modules. Inline error indication is rather project-dependent, thus this file is intended to be used as a reference and starting boilerplate for your controls.</p>
 <pre><code class="highlight javascript"><span class="hljs-keyword">import</span> { Input } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-mvx/tags'</span>
@@ -832,7 +1060,7 @@ const Input = ({ link, ...props }) =&gt; (
 <pre><code class="highlight javascript"><span class="hljs-keyword">import</span> { Input, TextArea } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-mvx/tags'</span>
 ...
 &lt;Input type=<span class="hljs-string">"text"</span> valueLink={ link } /&gt;
-<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">TextArea</span> <span class="hljs-attr">valueLink</span>=<span class="hljs-string">{</span> <span class="hljs-attr">link</span> } /&gt;</span></span>
+&lt;TextArea valueLink={ link } /&gt;
 </code></pre>
 <p>Its implementation is rather straightforward.</p>
 <h3 id="numeric-input">numeric input</h3>
@@ -849,11 +1077,11 @@ Like &quot;&quot; -&gt; &quot;-&quot; -&gt; &quot;-0&quot; -&gt; &quot;-0.&quot;
 <li>There are <code>integer</code> and <code>positive</code> boolean props controlling input rejection. They can be combined.</li>
 </ul>
 <p><code>&lt;NumberInput&gt;</code> validates its intermediate state and adds <code>invalid</code> class to enclosed input element if it&#39;s not a number.</p>
-<pre><code class="highlight jsx"><span class="hljs-keyword">import</span> { NumberInput } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-mvx/tags'</span>
+<pre><code class="highlight jsx">import { NumberInput } from 'react-mvx/tags'
 
-&lt;NumberInput valueLink={ link } /&gt;
-&lt;NumberInput valueLink={ link } integer={ true }/&gt;
-&lt;NumberInput valueLink={ link } positive={ true }/&gt;
+<span class="hljs-tag">&lt;<span class="hljs-title">NumberInput</span> <span class="hljs-attribute">valueLink</span>=<span class="hljs-value">{</span> <span class="hljs-attribute">link</span> } /&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-title">NumberInput</span> <span class="hljs-attribute">valueLink</span>=<span class="hljs-value">{</span> <span class="hljs-attribute">link</span> } <span class="hljs-attribute">integer</span>=<span class="hljs-value">{</span> <span class="hljs-attribute">true</span> }/&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-title">NumberInput</span> <span class="hljs-attribute">valueLink</span>=<span class="hljs-value">{</span> <span class="hljs-attribute">link</span> } <span class="hljs-attribute">positive</span>=<span class="hljs-value">{</span> <span class="hljs-attribute">true</span> }/&gt;</span>
 </code></pre>
 <h3 id="checkbox">checkbox</h3>
 <p>There are different ways how you can handle the checkbox components. The problem of the standard 
@@ -861,18 +1089,18 @@ checkbox control, though, is that it&#39;s not that easily styled.</p>
 <p><code>tags.jsx</code> contains the custom checkbox and radio components implemented using the plain <code>&lt;div /&gt;</code>
  element which toggles <code>selected</code> class on click. By default, it has <code>checkbox</code> CSS class,
   which can be overridden by passing <code>className</code> prop. It passes through anything else, including <code>children</code>.</p>
-<pre><code class="highlight jsx">&lt;Checkbox checkedLink={ booleanLink } /&gt;
-<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Checkbox</span> <span class="hljs-attr">checkedLink</span>=<span class="hljs-string">{</span> <span class="hljs-attr">arrayLink.contains</span>( '<span class="hljs-attr">option</span>' ) } /&gt;</span></span>
+<pre><code class="highlight jsx"><span class="hljs-tag">&lt;<span class="hljs-title">Checkbox</span> <span class="hljs-attribute">checkedLink</span>=<span class="hljs-value">{</span> <span class="hljs-attribute">booleanLink</span> } /&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-title">Checkbox</span> <span class="hljs-attribute">checkedLink</span>=<span class="hljs-value">{</span> <span class="hljs-attribute">arrayLink.contains</span>( '<span class="hljs-attribute">option</span>' ) } /&gt;</span>
 </code></pre>
 <h3 id="radio-group">radio group</h3>
 <p>There are two different ways how you can approach the data binding for the radio groups.
 First option is to pass the <code>value</code> of the particular option along with the link. Link this:</p>
-<pre><code class="highlight jsx">&lt;label&gt;
-    A: <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"radio"</span> <span class="hljs-attr">valueLink</span>=<span class="hljs-string">{</span> <span class="hljs-attr">flagLink</span> } <span class="hljs-attr">value</span>=<span class="hljs-string">"a"</span> /&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span></span>
-&lt;label&gt;
-    B: <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"radio"</span> <span class="hljs-attr">valueLink</span>=<span class="hljs-string">{</span> <span class="hljs-attr">flagLink</span> } <span class="hljs-attr">value</span>=<span class="hljs-string">"b"</span> /&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span></span>
+<pre><code class="highlight jsx"><span class="hljs-tag">&lt;<span class="hljs-title">label</span>&gt;</span>
+    A: <span class="hljs-tag">&lt;<span class="hljs-title">Input</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"radio"</span> <span class="hljs-attribute">valueLink</span>=<span class="hljs-value">{</span> <span class="hljs-attribute">flagLink</span> } <span class="hljs-attribute">value</span>=<span class="hljs-value">"a"</span> /&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-title">label</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-title">label</span>&gt;</span>
+    B: <span class="hljs-tag">&lt;<span class="hljs-title">Input</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"radio"</span> <span class="hljs-attribute">valueLink</span>=<span class="hljs-value">{</span> <span class="hljs-attribute">flagLink</span> } <span class="hljs-attribute">value</span>=<span class="hljs-value">"b"</span> /&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-title">label</span>&gt;</span>
 </code></pre>
 <p>Alternatively, you can use <code>link.equals( value )</code> method to produce the boolean
 link which is specially designed to create radio groups, as it&#39;s illustrated by
@@ -881,12 +1109,12 @@ the custom <code>&lt;Radio /&gt;</code> tags from the <code>tags.jsx</code>.</p>
 And whenever the link value is <code>true</code>, it adds <code>selected</code> class to the div.</p>
 <p>By default, it has <code>radio</code> CSS class, which can be overridden by passing <code>className</code> prop.
 It passes through anything else, including <code>children</code>.</p>
-<pre><code class="highlight jsx">&lt;label&gt;
-    A: <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Radio</span> <span class="hljs-attr">checkedLink</span>=<span class="hljs-string">{</span> <span class="hljs-attr">flagLink.equals</span>( '<span class="hljs-attr">a</span>' ) } /&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span></span>
-&lt;label&gt;
-    B: <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Radio</span> <span class="hljs-attr">checkedLink</span>=<span class="hljs-string">{</span> <span class="hljs-attr">flagLink.equals</span>( '<span class="hljs-attr">b</span>' ) } /&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span></span>
+<pre><code class="highlight jsx"><span class="hljs-tag">&lt;<span class="hljs-title">label</span>&gt;</span>
+    A: <span class="hljs-tag">&lt;<span class="hljs-title">Radio</span> <span class="hljs-attribute">checkedLink</span>=<span class="hljs-value">{</span> <span class="hljs-attribute">flagLink.equals</span>( '<span class="hljs-attribute">a</span>' ) } /&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-title">label</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-title">label</span>&gt;</span>
+    B: <span class="hljs-tag">&lt;<span class="hljs-title">Radio</span> <span class="hljs-attribute">checkedLink</span>=<span class="hljs-value">{</span> <span class="hljs-attribute">flagLink.equals</span>( '<span class="hljs-attribute">b</span>' ) } /&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-title">label</span>&gt;</span>
 </code></pre>
         </div>
     </div>

@@ -35,6 +35,11 @@ marked.setOptions({
 var bash = highlight.getLanguage('bash')
 highlight.registerLanguage('shell', function (highlight) {
   return bash
+});
+
+var html = highlight.getLanguage('html')
+highlight.registerLanguage('jsx', function (highlight) {
+  return html;
 })
 
 // Easier than changing Slate's js
