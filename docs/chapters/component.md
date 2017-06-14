@@ -340,3 +340,9 @@ Shall be used in place of every manual call to `forceUpdate()`.
 ## Events
 
 Component implements `Events` interface from the Type-R framework, thus it's able to trigger and subscribe for events.
+
+## Lifecycle hooks and mixins
+
+<aside class="warning">
+Lifecycle hooks are chained automatically on inheritance.
+</aside>
