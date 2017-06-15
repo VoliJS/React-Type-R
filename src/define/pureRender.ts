@@ -1,6 +1,6 @@
-export default function createPureRenderMixin( props ){
+export function compilePureProps( props ){
     const ctorBody      = [ 'var v; this._s = s && s._changeToken' ],
-        isChangedBody = [ 'var v; return ( s && s._changeToken !== t._s )' ];
+        isChangedBody = [ 'var v, t = this._changeTokens, s = this.state; return ( s && s._changeToken !== t._s )' ];
 
     for( let name in props ){
         const propExpr = `( ( v = p.${ name }) && v._changeToken ) || v`;
@@ -14,17 +14,22 @@ export default function createPureRenderMixin( props ){
     ChangeTokens.prototype = null;
 
     return {
-        _changeTokens : null,
-
-        shouldComponentUpdate( nextProps ){
-            return isChanged( this._changeTokens, nextProps, this.state );
-        },
-
-        componentDidMount(){
-            this._changeTokens = new ChangeTokens( this.props, this.state );
-        },
-        componentDidUpdate(){
-            this._changeTokens = new ChangeTokens( this.props, this.state );
-        }
+        _isChanged : isChanged,
+        _ChangeTokens : ChangeTokens
     }
 };
+
+export const PureRenderMixin = {
+    _changeTokens : null,
+
+    shouldComponentUpdate( nextProps ){
+        return this._isChanged( nextProps );
+    },
+
+    componentDidMount(){
+        this._changeTokens = new this._ChangeTokens( this.props, this.state );
+    },
+    componentDidUpdate(){
+        this._changeTokens = new this._ChangeTokens( this.props, this.state );
+    }
+}

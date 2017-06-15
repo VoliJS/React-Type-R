@@ -1,4 +1,8 @@
-export default function createPureRenderMixin(props: any): {
+export declare function compilePureProps(props: any): {
+    _isChanged: Function;
+    _ChangeTokens: any;
+};
+export declare const PureRenderMixin: {
     _changeTokens: any;
     shouldComponentUpdate(nextProps: any): any;
     componentDidMount(): void;

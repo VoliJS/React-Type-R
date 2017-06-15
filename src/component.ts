@@ -15,11 +15,6 @@ const reactMixinRules : any = { // Can't type it precisely because of weird type
     componentWillUpdate       : 'reverse',
     componentDidUpdate        : 'reverse',
     componentWillUnmount      : 'sequence',
-    state                     : 'merge',
-    store                     : 'merge',
-    props                     : 'merge',
-    context                   : 'merge',
-    childContext              : 'merge',
     getChildContext           : 'mergeSequence'
 };
 

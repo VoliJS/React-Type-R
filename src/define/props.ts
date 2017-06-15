@@ -5,7 +5,7 @@
  */
 
 import { collectSpecs, compileSpecs, TypeSpecs } from './typeSpecs'
-import createPureRenderMixin from './pureRender'
+import { PureRenderMixin, compilePureProps } from './pureRender'
 
 export interface PropsMetadata {
     pureRender? : boolean
@@ -38,9 +38,10 @@ export default function process( spec, { pureRender, _props = {}, _listenToProps
         delete spec.props;
     }
 
-    // compile pure render mixin
+    // compile pure render mixin, if there are props spec.
     if( spec._props && ( spec.pureRender || pureRender ) ){
-        spec.mixins.push( createPureRenderMixin( spec._props ) );
+        spec.mixins.push( PureRenderMixin );
+        spec.mixins.push( compilePureProps( spec._props ) );
     }
 }
 
