@@ -44,7 +44,7 @@
     "source-map-loader": "*",
     "ts-loader": "*",
     "type-r": "^1.0.0-rc6",
-    "typescript": "*",
+    "typescript": "<2.4.0",
     "webpack": "*"
   },
   "peerDependencies": {
