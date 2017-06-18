@@ -1,6 +1,10 @@
 # Component
 
-React-MVx extends React namespace and should be used instead of `react`. `@define` decorator must preceed all the Component class definitions.
+The Component is the base class for all UI components. It extends  `React.Component` glueing together React's JSX, Type-R state management with records, and NestedLink two-way data binding with links.
+
+_Local component state_ is managed with the Type-R _record_. Record is the declaratively defined mutable state container with deeply observable changes, validation, and advanced JSON mapping. Record may contain other records and collections, making it possible to compose the complex state from reusable parts.
+
+The common React-MVx design pattern for application state management can be described as "dirty top and pure bottom". Top level component which is associated with a route and represent the SPA page holds the page's state as its local state, passing its elements down to nested components which are mostly pure. Nested components may change records and collections received as props, which will be noticed by the top-level component and trigger top-down UI update because the state is _deeply observable_.
 
 ```javascript
 import React, { define } from 'react-mvx'
