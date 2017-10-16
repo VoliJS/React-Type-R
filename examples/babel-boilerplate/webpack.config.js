@@ -1,4 +1,5 @@
-var webpack = require( 'webpack' );
+var webpack = require( 'webpack' ),
+    path = require( 'path' );
 
 var config = {
     entry  : {
@@ -38,6 +39,11 @@ var config = {
                 test    : /\.jsx?$/,
                 exclude : /(node_modules|lib)/,
                 loader  : 'babel-loader'
+            },
+            {
+                test: /\.js$/,
+                use: ["source-map-loader"],
+                enforce: "pre"
             }
         ]
     }

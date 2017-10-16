@@ -7,8 +7,8 @@
   },
   "description": "React MV* framework",
   "main": "./dist/index.js",
-  "module": "./lib/src/index.js",
-  "types": "./lib/src/index.d.ts",
+  "module": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "files": [
     "dist",
     "lib",
@@ -33,24 +33,19 @@
   "author": "Vlad Balin",
   "license": "MIT",
   "devDependencies": {
-    "@types/prop-types": "*",
-    "@types/react": "*",
+    "@types/prop-types": "^15.5.2",
+    "@types/react": "^16.0.10",
     "daux-api-docs-theme": "^1.0.0",
     "handlebars": "^3.0.3",
     "highlight.js": "^8.7.0",
     "marked": "^0.3.5",
-    "prop-types": "*",
-    "react": "*",
-    "react-dom": "*",
-    "source-map-loader": "*",
-    "ts-loader": "*",
-    "type-r": "^1.0.0-rc6",
-    "typescript": "*",
-    "webpack": "*"
-  },
-  "peerDependencies": {
-    "prop-types": "*",
-    "react": "*",
-    "type-r": "^1.0.0-rc6"
+    "prop-types": "^15.6.0",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "source-map-loader": "^0.2.2",
+    "ts-loader": "^2.3.7",
+    "type-r": "^1.1.0-a16",
+    "typescript": "^2.5.3",
+    "webpack": "^3.7.1"
   }
 }

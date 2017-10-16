@@ -1,31 +1,32 @@
 {
   "private": true,
-  "dependencies": {},
+  "dependencies": {
+    "source-maps-loader": "^0.1.9"
+  },
   "devDependencies": {
-    "webpack": "*",
-    "css-loader": "*",
-    "style-loader": "*",
     "babel-cli": "*",
     "babel-core": "*",
     "babel-loader": "*",
-    "babel-plugin-transform-decorators-legacy": "*",
     "babel-plugin-add-module-exports": "*",
-    "babel-plugin-transform-object-rest-spread": "*",
     "babel-plugin-transform-class-properties": "*",
+    "babel-plugin-transform-decorators-legacy": "*",
+    "babel-plugin-transform-object-rest-spread": "*",
     "babel-plugin-transform-react-constant-elements": "*",
     "babel-plugin-transform-react-inline-elements": "*",
     "babel-preset-es2015": "*",
     "babel-preset-react": "*",
     "babel-runtime": "*",
-
+    "css-loader": "*",
     "react": "*",
     "react-dom": "*",
-    "react-mvx": "^1.0.0-a00",
-    "type-r": "^1.0.0-a00"
+    "style-loader": "*",
+    "type-r": "*",
+    "react-mvx": "*",
+    "webpack": "*"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node_modules/.bin/webpack -p",
+    "build": "node_modules/.bin/webpack",
     "watch": "node_modules/.bin/webpack --progress --colors --watch"
   }
 }

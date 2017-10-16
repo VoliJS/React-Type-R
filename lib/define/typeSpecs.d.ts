@@ -1,12 +1,17 @@
+import { ChangeHandler } from 'type-r';
+import { ComponentProto } from './common';
 export interface TypeSpecs {
-    [name: string]: Object | Function;
+    [name: string]: object | Function;
 }
-export declare function collectSpecs(spec: any, name: string): TypeSpecs;
 export declare function compileSpecs(props: TypeSpecs): {
     propTypes: {};
     defaults: any;
-    watchers: any;
-    changeHandlers: any;
+    watchers: {
+        [name: string]: (this: ComponentProto, propValue: any, propName: string) => void;
+    };
+    changeHandlers: {
+        [name: string]: ChangeHandler[];
+    };
 };
 export declare class Node {
 }
@@ -17,4 +22,3 @@ declare global  {
         integer: Function;
     }
 }
-export {};

@@ -1,6 +1,5 @@
 import React, { define } from 'react-mvx'
 import ReactDOM from 'react-dom'
-import { Input } from 'react-mvx/tags'
 import { Record } from 'type-r'
 
 import './styles.css'
@@ -34,7 +33,7 @@ import './styles.css'
 }
 
 const ItemView = ({ item }) => (
-    <Input valueLink={ item.getLink( 'text' ) } /> 
+    <input { ...item.linkAt( 'text' ).props } /> 
 );
 
 ReactDOM.render( <Application/>, document.getElementById( 'react-application' ) );

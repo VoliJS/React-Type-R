@@ -1,6 +1,5 @@
 import React, { define } from 'react-mvx'
 import cx from 'classnames'
-import { Input } from 'react-mvx/tags.jsx'
 import { ToDo } from './model'
 
 @define export default
@@ -18,21 +17,26 @@ class TodoList extends React.Component {
 
     render(){
         const { todos, filterDone } = this.props,
-              filtered = filterDone === null ? todos.models
-                            : todos.filter( todo => todo.done === filterDone ),
-
-              editingLink = this.state.getLink( 'editing' );
+              filtered = filterDone === null ?
+                            todos.models :
+                            todos.filter( todo => todo.done === filterDone ),
+              editingLink = this.state.linkAt( 'editing' );
 
         return (
             <section className="main">
-                <Input className="toggle-all" id="toggle-all" type="checkbox"
-                       checkedLink={ todos.getLink( 'allDone' ) }/>
+                <input type="checkbox"
+                       className="toggle-all"
+                       id="toggle-all"
+                       { ...todos.linkAt( 'allDone' ).props } />
 
-                <label htmlFor="toggle-all">Mark all as complete</label>
+                <label htmlFor="toggle-all">
+                    Mark all as complete
+                </label>
 
                 <ul className="todo-list">
                     { filtered.map( todo => (
-                        <TodoItem key={ todo.cid } todo={ todo }
+                        <TodoItem key={ todo.cid }
+                                  todo={ todo }
                                   editingLink={ editingLink }/>
                     ) )}
                 </ul>
@@ -56,18 +60,20 @@ const TodoItem = ( { todo, editingLink } ) =>{
     return (
         <li className={ className }>
             <div className="view">
-                <Input className="toggle" type="checkbox"
-                       checkedLink={ todo.getLink( 'done' ) }/>
+                <input type="checkbox"
+                       className="toggle" 
+                       { ...todo.linkAt( 'done' ).props }/>
 
                 <label onDoubleClick={ editingLink.action( () => todo ) }>
                     { todo.desc }
                 </label>
 
-                <button className="destroy" onClick={ () => todo.remove() }/>
+                <button className="destroy"
+                        onClick={ () => todo.remove() } />
             </div>
 
-            { editing && <Input className="edit"
-                                valueLink={ todo.getLink( 'desc' ) }
+            { editing && <input className="edit"
+                                { ...todo.linkAt( 'desc' ).props }
                                 autoFocus={ true }
                                 onBlur={ editingLink.action( () => null ) }
                                 onKeyDown={ editingLink.action( clearOnEnter ) }/> }

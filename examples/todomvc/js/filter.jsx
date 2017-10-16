@@ -7,24 +7,22 @@ const Filter = ( { count, filterLink, onClear } ) => (
 		</span>
 
         <ul className="filters">
-            <li>
-                <Radio checkedLink={ filterLink.equals( null ) } href="#/">
-                    All
-                </Radio>
-            </li>
-            <li>
-                <Radio checkedLink={ filterLink.equals( false ) } href="#/active">
-                    Active
-                </Radio>
-            </li>
-            <li>
-                <Radio checkedLink={ filterLink.equals( true ) } href="#/completed">
-                    Completed
-                </Radio>
-            </li>
+            <Radio checkedLink={ filterLink.equals( null ) }
+                   href="#/">
+                All
+            </Radio>
+            <Radio checkedLink={ filterLink.equals( false ) }
+                   href="#/active">
+                Active
+            </Radio>
+            <Radio checkedLink={ filterLink.equals( true ) }
+                   href="#/completed">
+                Completed
+            </Radio>
         </ul>
 
-        <button className="clear-completed" onClick={ onClear }>
+        <button className="clear-completed"
+                onClick={ onClear }>
             Clear completed
         </button>
     </footer>
@@ -33,9 +31,11 @@ const Filter = ( { count, filterLink, onClear } ) => (
 export default Filter;
 
 const Radio = ( { checkedLink, children, ...props } ) => (
-    <a className={ checkedLink.value ? 'selected' : '' }
-       onClick={ () => checkedLink.set( true ) }
-        { ...props }>
-        { children }
-    </a>
+    <li>
+        <a className={ checkedLink.value ? 'selected' : '' }
+        onClick={ () => checkedLink.set( true ) }
+            { ...props }>
+            { children }
+        </a>
+    </li>
 );

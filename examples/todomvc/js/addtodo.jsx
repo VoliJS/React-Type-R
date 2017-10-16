@@ -1,5 +1,4 @@
 import React, { define } from 'react-mvx'
-import { Input } from 'react-mvx/tags.jsx'
 
 @define
 export default class AddTodo extends React.Component {
@@ -16,8 +15,10 @@ export default class AddTodo extends React.Component {
             <header className="header">
                 <h1>todos</h1>
 
-                <Input className="new-todo" placeholder="What needs to be done?" autoFocus
-                       valueLink={ this.state.getLink( 'desc' ) }
+                <input className="new-todo"
+                       placeholder="What needs to be done?"
+                       autoFocus
+                       { ...this.linkAt( 'desc' ).props }
                        onKeyDown={ e => this.onKeyDown( e ) }
                 />
             </header>

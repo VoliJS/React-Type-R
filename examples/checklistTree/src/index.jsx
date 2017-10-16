@@ -6,7 +6,7 @@ import React, { define } from 'react-mvx'
 import ReactDOM from 'react-dom'
 
 // Import input controls, modified to support valueLink. Otherwise they behave as standard.
-import { Checkbox, Input } from 'react-mvx/tags'
+import { Checkbox, Input } from 'react-mvx'
 
 // Import checklist model definition. Think of "model" as of an observable serializable class.
 import { ChecklistItem } from './model'
@@ -83,9 +83,12 @@ const List = ({ items }) => (
         return (
             <div className='checklist'>
                 <div className='header'>
-                    <Checkbox checkedLink={ links.checked /* We use links instead of values... */ }/>
-                    <span className="created">{model.created.toLocaleTimeString()}</span>
-                    <Input valueLink={ links.name /* ...as if they would be values */ } />
+                    <input type="checkbox"
+                           { ...links.checked.props /* We use links instead of values... */ }/>
+                    <span className="created">
+                        { model.created.toLocaleTimeString() }
+                    </span>
+                    <input { ...links.name.props /* ...as if they would be values */ } />
                     <button onClick={ () => model.remove() /* custom model method to remove it from the collection */}>
                         Delete
                     </button>

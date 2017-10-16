@@ -1,4 +1,4 @@
-import 'css/app.css'
+import '../css/app.css'
 import React, { define } from 'react-mvx'
 import ReactDOM from 'react-dom'
 import {ToDo} from './model.js'
@@ -40,7 +40,7 @@ import AddTodo from './addtodo.jsx'
                                             filterDone={ filterDone }/> }
 
                     { hasTodos && <Filter count={ todos.activeCount }
-                                          filterLink={ this.state.getLink( 'filterDone' ) }
+                                          filterLink={ this.state.linkAt( 'filterDone' ) }
                                           onClear={ () => todos.clearCompleted() }
                     />}
                 </section>

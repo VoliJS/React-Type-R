@@ -1,34 +1,52 @@
-var webpack = require( 'webpack' );
+var webpack = require( 'webpack' ),
+    path = require( 'path' );
 
-module.exports = {
-    entry  : './src/index.jsx',
+var config = {
+    entry  : {
+        app : './src/index.jsx'
+    },
+
     output : {
         // export itself to a global var
-        path       : __dirname,
-        publicPath : '/',
-        filename   : 'app.js'
+        path       : __dirname + '/dist',
+        publicPath : '/dist/',
+        filename   : '[name].js'
     },
 
     devtool : 'source-map',
 
     resolve : {
-        modulesDirectories : [ 'node_modules', 'js', '' ]
+        modules : [ '../../node_modules', 'node_modules', 'src' ],
+        alias : {
+            'react-mvx' : path.resolve(__dirname, '../..' )
+        }
     },
 
     module : {
-        loaders : [
+        rules : [
             {
-                test    : /\.js$/,
-                exclude : /(node_modules)/,
-                loader  : 'babel?optional[]=runtime&stage=0'
+                test : /\.css$/,
+                use : [
+                    {
+                        loader: "style-loader"
+                    },
+                    {
+                        loader: "css-loader"
+                    }
+                ]
             },
-
             {
-                test    : /\.jsx$/,
-                loader  : 'babel?optional[]=runtime&stage=0'
+                test    : /\.jsx?$/,
+                exclude : /(node_modules|lib)/,
+                loader  : 'babel-loader'
             },
-
-            { test : /\.css$/, loader : "style-loader!css-loader" }
+            {
+                test: /\.js$/,
+                use: ["source-map-loader"],
+                enforce: "pre"
+            }
         ]
     }
 };
+
+module.exports = config;
