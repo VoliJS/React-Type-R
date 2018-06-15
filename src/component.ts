@@ -45,7 +45,6 @@ export class Component<P, S extends Record = Record > extends React.Component<P,
     static childContext? : TypeSpecs
     static pureRender? : boolean
 
-    private _disposed : boolean
     private static propTypes: any;
     private static defaultProps: any;
     private static contextTypes : any;
@@ -97,8 +96,6 @@ export class Component<P, S extends Record = Record > extends React.Component<P,
         this.state.set( typeof attrs === 'function' ? attrs.call( this, this.state, this.props ) : attrs );
     }
 
-    isMounted : () => boolean
-
     // Messenger methods...
     on : ( events : string | CallbacksByEvents, callback, context? ) => this
     once : ( events : string | CallbacksByEvents, callback, context? ) => this
@@ -113,6 +110,7 @@ export class Component<P, S extends Record = Record > extends React.Component<P,
 
     componentWillUnmount(){
         this.dispose();
+        this._silent = 2;
     }
 
     /**
@@ -123,37 +121,34 @@ export class Component<P, S extends Record = Record > extends React.Component<P,
      * both props and local state are applied.
      */
     transaction( fun : ( state? : Record ) => void ){
-        var shouldComponentUpdate = this.shouldComponentUpdate,
-            isRoot = shouldComponentUpdate !== returnFalse;
+        // Initialize transaction...
+        const isRoot = !this._silent;
+        if( isRoot ) this._silent = 1;
 
+        fun( this.state );
+
+        // Commit transaction...
         if( isRoot ){
-            // BUG: Pure render will break.
-            this.shouldComponentUpdate = returnFalse;
-        }
-
-        const { state, store } = this,
-              withStore = store ? state => store.transaction( () => fun( state ) ) : fun;
-        
-        state ? state.transaction( withStore ) : withStore( state );
-
-        if( isRoot ){
-            this.shouldComponentUpdate = shouldComponentUpdate;
+            this._silent = 0;
             this.asyncUpdate();
         }
     }
 
+    shouldComponentUpdate(){
+        return !this._silent;
+    }
+
     // Safe version of the forceUpdate suitable for asynchronous callbacks.
     asyncUpdate(){
-        this.shouldComponentUpdate === returnFalse || this._disposed || this.forceUpdate();
+        this._silent || this.forceUpdate();
+    }
+
+    private _silent : Silence = 0;
+
+    // Re
+    isMounted(){
+        return this._silent !== 2;
     }
 }
 
-function returnFalse(){ return false; }
-
-// Looks like React guys _really_ want to deprecate it. But no way.
-// We will work around their attempt.
-Object.defineProperty( Component.prototype, 'isMounted', {
-    value : function isMounted(){
-        return !this._disposed;
-    }
-})
+type Silence = 0 | 1 /* in transaction */ | 2 /* is disposed */;

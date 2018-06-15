@@ -9,7 +9,7 @@ export function createChangeTokensConstructor( props, watchers ) {
         `).join( '' )}
     `);
     
-    PropsChangeTokens.prototype.update = new Function( 'p', 't', `
+    PropsChangeTokens.prototype._update = new Function( 'p', 't', `
         var v, tk, upd = false, ws = t._watchers;
         
         ${ propNames.map( name => `
@@ -38,7 +38,14 @@ export const EmptyPropsChangeTokensCtor = createChangeTokensConstructor({}, {});
 
 export const PureRenderMixin = {
     shouldComponentUpdate( nextProps ){
-        return this._propsChangeTokens._hasChanges( nextProps, this );
+        const { _silent } = this;
+        this._silent = 1;
+        
+        const res = this._propsChangeTokens._update( nextProps, this );
+        
+        _silent || ( this._silent = 0 );
+
+        return !_silent && res;
     },
 
     componentWillMount : updateChangeTokens,
