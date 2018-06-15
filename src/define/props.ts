@@ -91,16 +91,6 @@ function handlePropsChanges( component : any, prev : object, next : object ){
  * Fired in componentWillMount as well, which makes it a nice way to sync state from props.
  */
 const WatchersMixin = {
-    componentWillReceiveProps( next ){
-        const { _watchers, props } = this;
-
-        for( let name in _watchers ){
-            if( next[ name ] !== props[ name ] ){
-                _watchers[ name ].call( this, next[ name ], name );
-            }        
-        }
-    },
-
     componentWillMount(){
         const { _watchers, props } = this;
 
