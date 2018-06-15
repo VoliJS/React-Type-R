@@ -47,7 +47,7 @@ export default function onDefine( this : ComponentClass<PropsProto>, { props, pu
         }
 
         if( prototype.pureRender ){
-            prototype.PropsChangeTokens = createChangeTokensConstructor( props );
+            prototype.PropsChangeTokens = createChangeTokensConstructor( props, watchers );
         }
     }
 

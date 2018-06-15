@@ -127,6 +127,7 @@ export class Component<P, S extends Record = Record > extends React.Component<P,
             isRoot = shouldComponentUpdate !== returnFalse;
 
         if( isRoot ){
+            // BUG: Pure render will break.
             this.shouldComponentUpdate = returnFalse;
         }
 
