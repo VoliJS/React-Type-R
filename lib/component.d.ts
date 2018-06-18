@@ -14,7 +14,6 @@ export declare class Component<P, S extends Record = Record> extends React.Compo
     static context?: TypeSpecs;
     static childContext?: TypeSpecs;
     static pureRender?: boolean;
-    private _disposed;
     private static propTypes;
     private static defaultProps;
     private static contextTypes;
@@ -34,7 +33,6 @@ export declare class Component<P, S extends Record = Record> extends React.Compo
     _initializeState(): void;
     assignToState(x: any, key: string): void;
     setState(attrs: object | ((state: S, props: P) => object)): void;
-    isMounted: () => boolean;
     on: (events: string | CallbacksByEvents, callback, context?) => this;
     once: (events: string | CallbacksByEvents, callback, context?) => this;
     off: (events?: string | CallbacksByEvents, callback?, context?) => this;
@@ -52,5 +50,8 @@ export declare class Component<P, S extends Record = Record> extends React.Compo
      * both props and local state are applied.
      */
     transaction(fun: (state?: Record) => void): void;
+    shouldComponentUpdate(): boolean;
     asyncUpdate(): void;
+    private _silent;
+    isMounted(): boolean;
 }

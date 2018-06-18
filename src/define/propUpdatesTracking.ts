@@ -1,4 +1,6 @@
-export function createChangeTokensConstructor( props, watchers ) {
+import { Record } from 'type-r'
+
+export function createChangeTokensConstructor( props : object, watchers : Watchers ) : PropsChangeTokensCtor {
     const propNames = Object.keys( props );
 
     const PropsChangeTokens = new Function( 'p', 's', `
@@ -25,17 +27,36 @@ export function createChangeTokensConstructor( props, watchers ) {
         return upd;
     `);    
 
-    return PropsChangeTokens;
+    return PropsChangeTokens as PropsChangeTokensCtor;
 };
 
 export const EmptyPropsChangeTokensCtor = createChangeTokensConstructor({}, {});
 
-// TODO: Must combine Pure Render with watchers.
-// Watcher can be added at any time.
-// Pure render... questionalble
-// State can be added at any time. ???
-export const PureRenderMixin = {
-    shouldComponentUpdate( nextProps ){
+export interface PropsChangeTokens {
+    _update( props : object, ws : Watchers ) : boolean
+    _s : {}
+    _isDirty : boolean
+}
+
+export interface PropsChangeTokensCtor {
+    new ( props : object, state : Record ) : PropsChangeTokens
+}
+
+export interface PropsUpdateTracking {
+    _silent : number
+    state : Record
+    pureRender : boolean
+    _propsChangeTokens : PropsChangeTokens
+    _watchers : Watchers
+}
+
+export interface Watchers {
+    [ name : string ] : ( value : any, name: string ) => void
+}
+
+// Both pure render and watcher enables props updates tracking.
+export const PropsChangesMixin = {
+    shouldComponentUpdate( this : PropsUpdateTracking, nextProps : object ){
         const { _silent, state, _propsChangeTokens } = this;
         this._silent = 1; // watchers
         
@@ -48,47 +69,28 @@ export const PureRenderMixin = {
 
         _propsChangeTokens._isDirty || ( _propsChangeTokens._isDirty = upd ); // pure render
 
-        if( _silent ) return false; // watchers
+        if( _silent ) return false;
         
-        this._silent = 0; // watchers
-        return !this.pureRender || _propsChangeTokens._isDirty; // pure render
-    },
-
-    shouldComponentUpdatePure( nextProps ){
-        const { state, _propsChangeTokens } = this;
-        
-        let upd = _propsChangeTokens._update( nextProps, this._watchers ); // both 
-
-        if( state && _propsChangeTokens._s !== state._changeToken ){ // pure render
-            _propsChangeTokens._s = state._changeToken;
-            upd = true; // pure render
-        }
-
-        _propsChangeTokens._isDirty || ( _propsChangeTokens._isDirty = upd ); // pure render
-
-        return _propsChangeTokens._isDirty; // pure render
-    },
-
-    shouldComponentUpdateWatchers( nextProps ){
-        const { _silent, _propsChangeTokens } = this;
-        this._silent = 1; // watchers
-        
-        _propsChangeTokens._update( nextProps, this._watchers ); // both 
-
-        if( _silent ) return false; // watchers
-        
-        this._silent = 0; // watchers
-        return true;
+        this._silent = 0;
+        return !this.pureRender || _propsChangeTokens._isDirty;
     },
 
     // We need to know if the component was actually rendered.
     componentDidUpdate(){ // Pure render only
         this._propsChangeTokens._isDirty = false;
+    },
+
+    componentDidMount(){ // Both
+        this._propsChangeTokens = new this.PropsChangeTokens( this.props, this.state );
     }
 }
 
-export const PropsChangeTracking = {
-    componentDidMount(){ // Both
-        this._propsChangeTokens = new this.PropsChangeTokens( this.props, this.state );
+export const WatchersMixin = {
+    componentWillMount(){
+        const { _watchers, props } = this;
+
+        for( let name in _watchers ){
+            _watchers[ name ].call( this, props[ name ], name );
+        }
     }
 }

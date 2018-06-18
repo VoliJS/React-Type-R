@@ -5,7 +5,7 @@
  */
 
 import { compileSpecs, TypeSpecs } from './typeSpecs'
-import { PureRenderMixin, createChangeTokensConstructor } from './pureRender'
+import { WatchersMixin, PropsChangesMixin, createChangeTokensConstructor } from './propUpdatesTracking'
 import { tools } from 'type-r'
 import { ComponentClass } from './common'
 
@@ -13,7 +13,6 @@ export interface PropsDefinition {
     pureRender? : boolean
     props : TypeSpecs
 }
-
 
 export interface PropsProto {
     pureRender? : boolean
@@ -28,14 +27,17 @@ export default function onDefine( this : ComponentClass<PropsProto>, { props, pu
 
     // process props spec...
     if( props ){
-        // Merge with inherited members...
+        // Merge with inherited members.
         prototype._props = tools.defaults( props, BaseClass.prototype._props || {} );
 
+        // Compile props spec.
         const { propTypes, defaults, watchers, changeHandlers } = compileSpecs( props );
+
         this.propTypes = propTypes;
 
         if( defaults ) this.defaultProps = defaults;
 
+        // Watchers require props updates tracking.
         if( watchers ){
             prototype._watchers = watchers;
             this.mixins.merge([ WatchersMixin ]);
@@ -46,13 +48,17 @@ export default function onDefine( this : ComponentClass<PropsProto>, { props, pu
             this.mixins.merge([ ChangeHandlersMixin ]);
         }
 
-        if( prototype.pureRender ){
+        // If pure render is defined in parent and props have changed,
+        // or if we have watchers defined, we need a new constructor.
+        if( prototype.pureRender || watchers ){
+            this.mixins.merge([ PropsChangesMixin ]);
             prototype.PropsChangeTokens = createChangeTokensConstructor( props, watchers );
         }
     }
-
-    if( pureRender ){
-        this.mixins.merge([ PureRenderMixin ]);
+    else if( pureRender ){
+        // If pure render is defined, need a new construtor even if props has not been defined.
+        this.mixins.merge([ PropsChangesMixin ]);
+        prototype.PropsChangeTokens = createChangeTokensConstructor( prototype._props, prototype._watchers );
     }
 }
 
@@ -82,20 +88,6 @@ function handlePropsChanges( component : any, prev : object, next : object ){
             for( let handler of _changeHandlers[ name ] ){
                 handler( next[ name ], prev[ name ], component );
             }
-        }
-    }
-}
-
-/**
- * Watchers works on props replacement and fires _before_ any change will be applied and UI is updated.
- * Fired in componentWillMount as well, which makes it a nice way to sync state from props.
- */
-const WatchersMixin = {
-    componentWillMount(){
-        const { _watchers, props } = this;
-
-        for( let name in _watchers ){
-            _watchers[ name ].call( this, props[ name ], name );
         }
     }
 }

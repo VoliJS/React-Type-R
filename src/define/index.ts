@@ -20,4 +20,4 @@ export default function onDefine( this : ComponentClass<ComponentProto>, definit
 };
 
 export { Node, Element, TypeSpecs } from './typeSpecs'
-export { EmptyPropsChangeTokensCtor } from './pureRender'
+export { EmptyPropsChangeTokensCtor } from './propUpdatesTracking'
