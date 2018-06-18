@@ -22,6 +22,8 @@ var config = {
         // }
     },
 
+    mode : 'development',
+    
     module : {
         rules : [
             {

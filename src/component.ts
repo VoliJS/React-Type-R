@@ -108,9 +108,11 @@ export class Component<P, S extends Record = Record > extends React.Component<P,
 
     dispose : () => void
 
+    _disposed : boolean
+
     componentWillUnmount(){
         this.dispose();
-        this._silent = 2;
+        this._disposed = true;
     }
 
     /**
@@ -122,38 +124,38 @@ export class Component<P, S extends Record = Record > extends React.Component<P,
      */
     transaction( fun : ( state? : Record ) => void ){
         // Initialize transaction...
-        const isRoot = !this._silent;
-        if( isRoot ) this._silent = 1;
+        const { shouldComponentUpdate } = this,
+            isRoot = shouldComponentUpdate !== shouldNotUpdate;
+
+        if( isRoot ) this.shouldComponentUpdate = shouldNotUpdate;
 
         fun( this.state );
 
         // Commit transaction...
         if( isRoot ){
-            this._silent = 0;
+            this.shouldComponentUpdate = shouldComponentUpdate;
             this.asyncUpdate();
         }
     }
 
-    shouldComponentUpdate(){
-        return !this._silent;
-    }
-
     // Safe version of the forceUpdate suitable for asynchronous callbacks.
     asyncUpdate(){
-        this._silent || this.forceUpdate();
+        this.shouldComponentUpdate === shouldNotUpdate || this._disposed || this.forceUpdate();
     }
 
-    private _silent : Silence = 0;
-
-    // Re
+    // Legacy method, don't use.
     isMounted : () => boolean
 }
 
 Object.defineProperty( Component.prototype, 'isMounted',{
     value(){
-        return this._silent !== 2;
+        return !this._disposed;
     }
 });
 
+function shouldNotUpdate(){
+    // PROBLEM: Watchers won't be called. But they should.
+    return false;
+}
 
 type Silence = 0 | 1 /* in transaction */ | 2 /* is disposed */;

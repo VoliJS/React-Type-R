@@ -1,6 +1,6 @@
 import { Record } from 'type-r'
 
-export function createChangeTokensConstructor( props : object, watchers : Watchers ) : PropsChangeTokensCtor {
+export function createChangeTokensConstructor( props : object, watchers : Watchers   = {} ) : PropsChangeTokensCtor {
     const propNames = Object.keys( props );
 
     const PropsChangeTokens = new Function( 'p', 's', `
@@ -59,7 +59,9 @@ export const PropsChangesMixin = {
     shouldComponentUpdate( this : PropsUpdateTracking, nextProps : object ){
         const { _silent, state, _propsChangeTokens } = this;
         this._silent = 1; // watchers
-        
+
+        // PROBLEM: Here we must be protected from the state updates.
+        // Thus, asyncUpdate must be suppressed. _silent is good mechanics for that.
         let upd = _propsChangeTokens._update( nextProps, this ); // both 
 
         if( state && _propsChangeTokens._s !== state._changeToken ){ // pure render
