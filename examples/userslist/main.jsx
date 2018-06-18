@@ -60,14 +60,18 @@ export class UsersList extends React.Component {
                     />
                 ) )}
 
-                <Modal isOpen={ Boolean( state.adding ) }>
-                    <EditUser userLink={ state.linkAt( 'adding' ) }
-                              onSave={ () => state.users.add( state.adding ) }/>
-                </Modal>
+                { state.adding &&
+                    <Modal isOpen={ true }>
+                        <EditUser userLink={ state.linkAt( 'adding' ) }
+                                onSave={ () => state.users.add( state.adding ) }/>
+                    </Modal>
+                }
 
-                <Modal isOpen={ Boolean( state.editing ) }>
-                    <EditUser userLink={ state.linkAt( 'editing' ) } />
-                </Modal>
+                { state.editing &&
+                    <Modal isOpen={ true }>
+                        <EditUser userLink={ state.linkAt( 'editing' ) } />
+                    </Modal>
+                }
             </div>
         );
     }

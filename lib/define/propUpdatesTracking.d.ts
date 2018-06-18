@@ -2,7 +2,7 @@ import { Record } from 'type-r';
 export declare function createChangeTokensConstructor(props: object, watchers: Watchers): PropsChangeTokensCtor;
 export declare const EmptyPropsChangeTokensCtor: PropsChangeTokensCtor;
 export interface PropsChangeTokens {
-    _update(props: object, ws: Watchers): boolean;
+    _update(props: object, component: PropsUpdateTracking): boolean;
     _s: {};
     _isDirty: boolean;
 }

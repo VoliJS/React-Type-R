@@ -146,9 +146,14 @@ export class Component<P, S extends Record = Record > extends React.Component<P,
     private _silent : Silence = 0;
 
     // Re
-    isMounted(){
+    isMounted : () => boolean
+}
+
+Object.defineProperty( Component.prototype, 'isMounted',{
+    value(){
         return this._silent !== 2;
     }
-}
+});
+
 
 type Silence = 0 | 1 /* in transaction */ | 2 /* is disposed */;

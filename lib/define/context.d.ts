@@ -8,4 +8,4 @@ export interface ContextProto {
     _context: TypeSpecs;
     _childContext: TypeSpecs;
 }
-export default function onDefine(this: ComponentClass<ContextProto>, {context, childContext}: ContextDefinition, BaseClass: ComponentClass<ContextProto>): void;
+export default function onDefine(this: ComponentClass<ContextProto>, { context, childContext }: ContextDefinition, BaseClass: ComponentClass<ContextProto>): void;

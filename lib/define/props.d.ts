@@ -16,4 +16,4 @@ export interface PropsProto {
     _changeHandlers?: any;
     PropsChangeTokens?: any;
 }
-export default function onDefine(this: ComponentClass<PropsProto>, {props, pureRender}: PropsDefinition, BaseClass: ComponentClass<PropsProto>): void;
+export default function onDefine(this: ComponentClass<PropsProto>, { props, pureRender }: PropsDefinition, BaseClass: ComponentClass<PropsProto>): void;

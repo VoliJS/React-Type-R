@@ -19,6 +19,7 @@ var config = {
         modules : [ 'node_modules', 'src' ],
     },
 
+    mode : 'development',
     module : {
         rules : [
             {

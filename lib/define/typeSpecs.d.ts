@@ -7,18 +7,20 @@ export declare function compileSpecs(props: TypeSpecs): {
     propTypes: {};
     defaults: any;
     watchers: {
-        [name: string]: (this: ComponentProto, propValue: any, propName: string) => void;
+        [name: string]: PropWatcher;
     };
     changeHandlers: {
         [name: string]: ChangeHandler[];
     };
 };
+type PropWatcher = (this: ComponentProto, propValue: any, propName: string) => void;
 export declare class Node {
 }
 export declare class Element {
 }
-declare global  {
+declare global {
     interface NumberConstructor {
         integer: Function;
     }
 }
+export {};

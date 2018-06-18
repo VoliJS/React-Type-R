@@ -12,13 +12,13 @@ export function createChangeTokensConstructor( props : object, watchers : Watche
         `).join( '' )}
     `);
     
-    PropsChangeTokens.prototype._update = new Function( 'p', 'ws', `
+    PropsChangeTokens.prototype._update = new Function( 'p', 't', `
         var v, tk, upd = false;
         
         ${ propNames.map( name => `
             v = p.${ name }, tk = ( v && v._changeToken ) || v;
             if( this.${ name } !== tk ){
-                ${ watchers[ name ] ? `ws.${ name }.call( t, v, '${name}' );` : '' }
+                ${ watchers[ name ] ? `t._watchers.${ name }.call( t, v, '${name}' );` : '' }
                 this.${ name } = tk;
                 upd = true;
             };
@@ -33,7 +33,7 @@ export function createChangeTokensConstructor( props : object, watchers : Watche
 export const EmptyPropsChangeTokensCtor = createChangeTokensConstructor({}, {});
 
 export interface PropsChangeTokens {
-    _update( props : object, ws : Watchers ) : boolean
+    _update( props : object, component : PropsUpdateTracking ) : boolean
     _s : {}
     _isDirty : boolean
 }
@@ -60,7 +60,7 @@ export const PropsChangesMixin = {
         const { _silent, state, _propsChangeTokens } = this;
         this._silent = 1; // watchers
         
-        let upd = _propsChangeTokens._update( nextProps, this._watchers ); // both 
+        let upd = _propsChangeTokens._update( nextProps, this ); // both 
 
         if( state && _propsChangeTokens._s !== state._changeToken ){ // pure render
             _propsChangeTokens._s = state._changeToken;

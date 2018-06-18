@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import * as React from 'react';
 import { ChainableAttributeSpec, define, mixinRules, mixins } from 'type-r';
 import { Component } from './component';
