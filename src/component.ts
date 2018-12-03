@@ -138,6 +138,8 @@ export class Component<P, S extends Record = Record > extends React.Component<P,
         }
     }
 
+    
+
     // Safe version of the forceUpdate suitable for asynchronous callbacks.
     asyncUpdate(){
         this.shouldComponentUpdate === shouldNotUpdate || this._disposed || this.forceUpdate();
@@ -159,3 +161,24 @@ function shouldNotUpdate(){
 }
 
 type Silence = 0 | 1 /* in transaction */ | 2 /* is disposed */;
+
+
+const AfterRenderMixin = {
+    componentDidMount : callAfterRenderHooks,
+    componentDidUpdate : callAfterRenderHooks,
+
+    afterRender( hook ){
+        const { _callAfterRender } = this;
+        this._callafterRender = _callAfterRender ? () => {
+            _callAfterRender();
+            hook();
+        } : hook;
+    }
+}
+
+function callAfterRenderHooks(){
+    if( this._callAfterRender ){
+        this._callAfterRender();
+        this._callAfterRender = null;
+    } 
+}

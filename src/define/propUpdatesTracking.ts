@@ -56,6 +56,74 @@ export interface Watchers {
 
 // Both pure render and watcher enables props updates tracking.
 export const PropsChangesMixin = {
+    /**
+     * 1. For values replacement - we already know old and new stuff. So, plain comparison will do.
+     * 2. We need to store tokens for Transactional props. That's it.
+     */    
+    shouldComponentUpdate( this : PropsUpdateTracking, nextProps : object ){
+        const { props } = this;
+
+
+        /// Single prop x (pure render)
+        if( nextProps.x !== props.x ){
+            // Pure render
+            changed = true;
+
+            // Watcher
+            this._watchers.x.call( this, nextProps.x, 'x' );
+            
+            props.x && this.stopListening( props.x );
+
+            // events
+            nextProps.x && this.afterRender( () => {
+                this.listenTo( props.x, this._events.x );
+            });
+        }
+
+        /// Transactional props x (pure render)
+        next = nextProps.x;
+
+        if( next !== props.x || ( next && next._changeToken !== _tokens.x ) ){
+            _tokens.x = next && next._changeToken;
+
+            // Pure render
+            changed = true;
+
+            // Watcher
+            this._watchers.x.call( this, nextProps.x, 'x' );
+        }
+
+        if( ( ev = next !== props.x ) || ( next && next._changeToken !== _tokens.x ) ){
+            _tokens.x = next && next._changeToken;
+
+            // Pure render
+            changed = true;
+
+            // Watcher
+            this._watchers.x.call( this, nextProps.x, 'x' );
+        }
+
+        /// Date prop
+        
+        // Just watchers, plain props
+        for( let key of this._watchedKeys ){
+            const next = nextProps[ key ];
+            if( props[ key ] !== next ){
+                this._watchers[ key ].call( this, next, key );
+            }
+        }
+
+        // Just watchers, Transactional props
+        for( let key of this._watchedKeys ){
+            const next = nextProps[ key ];
+
+            if( props[ key ] !== next || ( next && next._changeToken !== this._tokens[ key ] ) ){
+                this._watchers[ key ].call( this, nextProps[ key ], key );
+                this._tokens[ key ] = next && next._changeToken;
+            }
+        }
+    }
+
     shouldComponentUpdate( this : PropsUpdateTracking, nextProps : object ){
         const { _silent, state, _propsChangeTokens } = this;
         this._silent = 1; // watchers
