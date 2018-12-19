@@ -20,7 +20,11 @@ export interface Watchers {
     [name: string]: (value: any, name: string) => void;
 }
 export declare const PropsChangesMixin: {
-    shouldComponentUpdate(this: PropsUpdateTracking, nextProps: object): boolean;
+    /**
+     * 1. For values replacement - we already know old and new stuff. So, plain comparison will do.
+     * 2. We need to store tokens for Transactional props. That's it.
+     */
+    shouldComponentUpdate(this: PropsUpdateTracking, nextProps: object): void;
     componentDidUpdate(): void;
     componentDidMount(): void;
 };

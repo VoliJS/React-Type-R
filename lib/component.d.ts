@@ -32,10 +32,6 @@ export declare class Component<P, S extends Record = Record> extends React.Compo
     _initializeState(): void;
     assignToState(x: any, key: string): void;
     setState(attrs: object | ((state: S, props: P) => object)): void;
-<<<<<<< HEAD
-=======
-    isMounted: () => boolean;
->>>>>>> develop
     on: (events: string | CallbacksByEvents, callback: any, context?: any) => this;
     once: (events: string | CallbacksByEvents, callback: any, context?: any) => this;
     off: (events?: string | CallbacksByEvents, callback?: any, context?: any) => this;
@@ -44,6 +40,7 @@ export declare class Component<P, S extends Record = Record> extends React.Compo
     listenTo: (source: Messenger, a: string | CallbacksByEvents, b?: Function) => this;
     listenToOnce: (source: Messenger, a: string | CallbacksByEvents, b?: Function) => this;
     dispose: () => void;
+    _disposed: boolean;
     componentWillUnmount(): void;
     /**
      * Performs transactional update for both props and state.
@@ -53,8 +50,6 @@ export declare class Component<P, S extends Record = Record> extends React.Compo
      * both props and local state are applied.
      */
     transaction(fun: (state?: Record) => void): void;
-    shouldComponentUpdate(): boolean;
     asyncUpdate(): void;
-    private _silent;
     isMounted: () => boolean;
 }
