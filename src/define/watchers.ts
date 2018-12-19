@@ -1,4 +1,5 @@
 import { Component } from "react";
+import { Transactional } from "type-r";
 
 export interface WatchersContext {
     __eval( component : Component, nextProps : object ) : void
@@ -38,6 +39,10 @@ export function createWatchersContext( _attributes : object ) : typeof WatchersC
     }
 
     return WatchersContext;
+}
+
+function getWatchersNames( attrs ) {
+    return [];
 }
 
 function tokenOf( Ctor : Function, key : string ) : string{

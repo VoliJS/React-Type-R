@@ -24,7 +24,7 @@ export declare const PropsChangesMixin: {
      * 1. For values replacement - we already know old and new stuff. So, plain comparison will do.
      * 2. We need to store tokens for Transactional props. That's it.
      */
-    shouldComponentUpdate(this: PropsUpdateTracking, nextProps: object): void;
+    shouldComponentUpdate(this: PropsUpdateTracking, nextProps: object): boolean;
     componentDidUpdate(): void;
     componentDidMount(): void;
 };
