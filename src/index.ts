@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ChainableAttributeSpec, define, mixinRules, mixins } from 'type-r';
+import { ChainableAttributeSpec, define, mixinRules, mixins, type } from 'type-r';
 import { Component } from './component';
 import { Element, Node } from './define';
 import Link from './link';
@@ -34,8 +34,8 @@ ReactMVx.default = ReactMVx;
 ReactMVx.define = define;
 ReactMVx.mixins = mixins;
 
-ReactMVx.Node = Node.value( null );
-ReactMVx.Element = Element.value( null );
+ReactMVx.Node = type( Node ).value( null );
+ReactMVx.Element = type( Element ).value( null );
 ReactMVx.Link = Link;
 
 ReactMVx.Component = Component as any;

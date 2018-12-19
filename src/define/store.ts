@@ -22,7 +22,7 @@ export default function onDefine( this : ComponentClass<StoreProto>, definition 
     }
     else if( store || definition.Store ) {
         if( typeof store === 'function' ){
-            StoreClass = store;
+            StoreClass = store as typeof Store;
             store = void 0;
         }
 

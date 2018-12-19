@@ -1,6 +1,6 @@
-import * as PropTypes from 'prop-types'
-import { Record, tools, AnyType, ChangeHandler } from 'type-r'
-import { ComponentProto } from './common'
+import * as PropTypes from 'prop-types';
+import { ChangeHandler, Record } from 'type-r';
+import { ComponentProto } from './common';
 
 export interface TypeSpecs {
     [ name : string ] : object | Function
@@ -15,7 +15,9 @@ export function compileSpecs( props : TypeSpecs ){
         watchers : { [ name : string ] : PropWatcher },
         changeHandlers : { [ name : string ] : ChangeHandler[] };
 
-    modelProto.forEachAttr( modelProto._attributes, ( spec : AnyType, name : string ) => {
+    for( let spec of modelProto._attributesArray ){
+        const { name } = spec;
+    
         // Skip auto-generated `id` attribute.
         if( name !== 'id' ){
             const { value, type, options } = spec;
@@ -55,7 +57,7 @@ export function compileSpecs( props : TypeSpecs ){
                 defaults[ name ] = spec.convert( value, void 0, null, {} );
             }
         }
-    });
+    }
 
     return { propTypes, defaults, watchers, changeHandlers };
 }
@@ -76,16 +78,9 @@ function translateType( Type : Function, isRequired : boolean ){
     return isRequired ? T.isRequired : T;
 }
 
-declare global {
-    interface NumberConstructor {
-        integer : Function
-    }
-}
-
 function _translateType( Type : Function ){
     switch( Type ){
         case Number :
-        case Number.integer :
             return PropTypes.number;
         case String :
             return PropTypes.string;
@@ -105,7 +100,7 @@ function _translateType( Type : Function ){
         case null :
             return PropTypes.any;
         default:
-            return PropTypes.instanceOf( Type );
+            return PropTypes.instanceOf( Type as any );
     }
 }
 

@@ -32,6 +32,10 @@ export declare class Component<P, S extends Record = Record> extends React.Compo
     _initializeState(): void;
     assignToState(x: any, key: string): void;
     setState(attrs: object | ((state: S, props: P) => object)): void;
+<<<<<<< HEAD
+=======
+    isMounted: () => boolean;
+>>>>>>> develop
     on: (events: string | CallbacksByEvents, callback: any, context?: any) => this;
     once: (events: string | CallbacksByEvents, callback: any, context?: any) => this;
     off: (events?: string | CallbacksByEvents, callback?: any, context?: any) => this;

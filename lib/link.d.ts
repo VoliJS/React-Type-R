@@ -1,2 +1,2 @@
-import { Link } from './valuelink/link';
+import { Link } from 'valuelink/lib/link';
 export default Link;

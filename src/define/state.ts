@@ -19,7 +19,7 @@ export default function process( this : ComponentClass<StateProto>, definition :
     let { state, State } = definition;
 
     if( typeof state === 'function' ){
-        State = state;
+        State = state as typeof Record;
         state = void 0;
     }
 

@@ -23,6 +23,7 @@ export default {
     external: [
         'react',
         'type-r',
-        'prop-types'
+        'prop-types',
+        'valuelink'
     ]
 };
