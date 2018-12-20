@@ -2,22 +2,17 @@
  * React-Type-R component base class. Overrides React component.
  */
 import * as React from 'react';
-import { CallbacksByEvents, Messenger, Record, Store } from 'type-r';
+import { CallbacksByEvents, Messenger, Record } from 'type-r';
 import onDefine, { TypeSpecs } from './define';
 import Link from './link';
 export declare class Component<P, S extends Record = Record> extends React.Component<P, S> {
     cid: string;
     static state?: TypeSpecs | typeof Record;
-    static store?: TypeSpecs | typeof Store;
     static props?: TypeSpecs;
-    static context?: TypeSpecs;
-    static childContext?: TypeSpecs;
     static pureRender?: boolean;
     private _disposed;
     private static propTypes;
     private static defaultProps;
-    private static contextTypes;
-    private static childContextTypes;
     private PropsChangeTokens;
     static extend: (spec: object, statics?: object) => Component<any>;
     linkAt(key: string): Link<any>;
@@ -28,7 +23,6 @@ export declare class Component<P, S extends Record = Record> extends React.Compo
     readonly links: any;
     static onDefine: typeof onDefine;
     readonly state: S;
-    readonly store?: Store;
     constructor(props?: any, context?: any);
     _initializeState(): void;
     assignToState(x: any, key: string): void;

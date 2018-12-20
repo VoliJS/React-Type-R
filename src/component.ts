@@ -13,11 +13,7 @@ import Link from './link';
     // Definitions to be extracted from mixins and statics and passed to `onDefine()`
     state                     : mixinRules.merge,
     State                     : mixinRules.value,
-    store                     : mixinRules.merge,
-    Store                     : mixinRules.value,
     props                     : mixinRules.merge,
-    context                   : mixinRules.merge,
-    childContext              : mixinRules.merge,
     pureRender                : mixinRules.protoValue
 })
 @mixinRules( {
@@ -31,7 +27,6 @@ import Link from './link';
 
     // And a bit more to fix inheritance quirks.
     shouldComponentUpdate     : mixinRules.some,
-    getChildContext           : mixinRules.defaults
 } )
 // Component can send and receive events...
 @mixins( Messenger )
@@ -39,17 +34,12 @@ export class Component<P, S extends Record = Record > extends React.Component<P,
     cid : string
 
     static state? : TypeSpecs | typeof Record
-    static store? : TypeSpecs | typeof Store
     static props? : TypeSpecs
-    static context? : TypeSpecs
-    static childContext? : TypeSpecs
     static pureRender? : boolean
 
     private _disposed : boolean
     private static propTypes: any;
     private static defaultProps: any;
-    private static contextTypes : any;
-    private static childContextTypes : any;
 
     private PropsChangeTokens : Function
     
@@ -78,7 +68,6 @@ export class Component<P, S extends Record = Record > extends React.Component<P,
     static onDefine = onDefine;
 
     readonly state : S
-    readonly store? : Store
 
     constructor( props?, context? ){
         super( props, context );
@@ -129,11 +118,8 @@ export class Component<P, S extends Record = Record > extends React.Component<P,
         if( isRoot ){
             this.shouldComponentUpdate = returnFalse;
         }
-
-        const { state, store } = this,
-              withStore = store ? state => store.transaction( () => fun( state ) ) : fun;
         
-        state ? state.transaction( withStore ) : withStore( state );
+        this.state.transaction( fun );
 
         if( isRoot ){
             this.shouldComponentUpdate = shouldComponentUpdate;

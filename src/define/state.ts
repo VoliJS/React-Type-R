@@ -2,7 +2,7 @@
  * State
  */
 import { define, Record, Store } from 'type-r'
-import { ComponentClass } from './common'
+import { ComponentClass, StoreContext } from './common'
 
 export interface StateDefinition {
     state? : object | typeof Record
@@ -37,48 +37,52 @@ export default function process( this : ComponentClass<StateProto>, definition :
     }
 
     if( state || State ){
-        this.mixins.merge([ StateMixin, UpdateOnNestedChangesMixin ]);
+        this.mixins.merge([ StateMixin ]);
     }
 }
 
-export const StateMixin = {
-    //state : null,
+export class StateMixin {
+    State : typeof Record
+    state : Record
+    props : { __keepState : Record }
 
     _initializeState(){
         // props.__keepState is used to workaround issues in Backbone intergation layer
         const state = this.state = this.props.__keepState || new this.State();
         
         // Take ownership on state...
-        state._owner = this;
+        state._owner = this as any;
         state._ownerKey = 'state';
-    },
+    }
 
-    context : {
-        _nestedStore : Store
-    },
+    _onChildrenChange(){}
+
+    static contextType = StoreContext;
+
+    context : Store
 
     // reference global store to fix model's store locator
     getStore(){
         // Attempt to get the store from the context first. Then - fallback to the state's default store.
         // TBD: Need to figure out a good way of managing local stores.
-        let context, state;
+        let context : Store, state : Record;
 
-        return  ( ( context = this.context ) && context._nestedStore ) ||
+        return  ( ( context = this.context ) && context ) ||
                 ( ( state = this.state ) && state._defaultStore ) || Store.global;
-    },
+    }
+
+    _preventDispose : boolean
+
+    asyncUpdate : () => void
+
+    componentDidMount(){
+        this._onChildrenChange = this.asyncUpdate;
+    }
 
     componentWillUnmount(){
         const { state } = this;
         state._owner = state._ownerKey = void 0;
         this._preventDispose /* hack for component-view to preserve the state */ || state.dispose();
         this.state = void 0;
-    }
-};
-
-export const UpdateOnNestedChangesMixin = {
-    _onChildrenChange(){},
-
-    componentDidMount(){
-        this._onChildrenChange = this.asyncUpdate;
     }
 };
