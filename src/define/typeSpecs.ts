@@ -1,4 +1,5 @@
-import * as PropTypes from 'prop-types';
+import * as PropTypes from 'prop-types'
+
 import { ChangeHandler, Record } from 'type-r';
 import { ComponentProto } from './common';
 
@@ -78,29 +79,58 @@ function translateType( Type : Function, isRequired : boolean ){
     return isRequired ? T.isRequired : T;
 }
 
-function _translateType( Type : Function ){
+export type PropTypeValidator = (props : object, propName : string, componentName : string ) => Error
+
+function _translateType( Type : Function ) : PropTypeValidator {
     switch( Type ){
-        case Number :
-            return PropTypes.number;
+        case Symbol : 
+            return createSimpleValidator( 'symbol' );
+        case Number : 
+            return createSimpleValidator( 'number' );
         case String :
-            return PropTypes.string;
+            return createSimpleValidator( 'string' );
         case Boolean :
-            return PropTypes.bool;
+            return createSimpleValidator( 'boolean' );;
         case Array :
-            return PropTypes.array;
+            return (props, propName, componentName) => (
+                assert(
+                    Array.isArray( props[ propName ] ),
+                    propName, componentName, 'an Array'
+                )
+            )
         case Function :
-            return PropTypes.func;
+            return createSimpleValidator( 'function' );;
         case Object :
-            return PropTypes.object;
+            return createSimpleValidator( 'object' );;
         case Node :
-            return PropTypes.node;
+            return (props, propName, componentName) => void 0;
         case Element :
-            return PropTypes.element;
+            return (props, propName, componentName) => void 0;
         case void 0 :
         case null :
-            return PropTypes.any;
+            return (props, propName, componentName) => void 0;
         default:
-            return PropTypes.instanceOf( Type as any );
+            return (props, propName, componentName) => (
+                assert(
+                    !props[ propName ] || props[ propName ] instanceof Type,
+                    propName, componentName, Type.name
+                )
+            );
     }
 }
 
+function createSimpleValidator( type ){
+    return (props, propName, componentName) => (
+        assert(
+            typeof props[ propName ] === type,
+            propName, componentName, 'a ' + type 
+        )
+    )
+}
+
+function assert( good, propName, componentName, type ){
+    return good ? void 0 : new Error(
+        'Prop `' + propName + '` supplied to' +
+        ' `' + componentName + '` must be ' + type
+    );
+}
