@@ -30,7 +30,7 @@ import Link from './link';
 } )
 // Component can send and receive events...
 @mixins( Messenger )
-export class Component<P, S extends Record = Record > extends React.Component<P, S> {
+export class Component<P extends object, S extends Record = Record> extends React.Component<P, S> {
     cid : string
 
     static state? : TypeSpecs | typeof Record
@@ -151,4 +151,4 @@ Object.defineProperty( Component.prototype, 'isMounted', {
     value : function isMounted(){
         return !this._disposed;
     }
-})
+});

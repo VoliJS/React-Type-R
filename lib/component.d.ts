@@ -5,7 +5,7 @@ import * as React from 'react';
 import { CallbacksByEvents, Messenger, Record, Store } from 'type-r';
 import onDefine, { TypeSpecs } from './define';
 import Link from './link';
-export declare class Component<P, S extends Record = Record> extends React.Component<P, S> {
+export declare class Component<P extends object, S extends Record = Record> extends React.Component<P, S> {
     cid: string;
     static state?: TypeSpecs | typeof Record;
     static props?: TypeSpecs;

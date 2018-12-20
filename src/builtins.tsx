@@ -64,3 +64,8 @@ export function externalStoreComponent<S extends Store, P>( store : S, Component
 
     return ExternalStoreComponent as any;
 }
+
+@define
+export class PureComponent<P extends object, S extends Record = Record> extends Component<P,S> {
+    static pureRender = true;
+}

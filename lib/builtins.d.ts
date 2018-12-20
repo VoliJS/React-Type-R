@@ -1,5 +1,5 @@
 import { Component } from './component';
-import { Store } from 'type-r';
+import { Store, Record } from 'type-r';
 /**
  * Connect Store class to the component and expose it to the component subtree.
  * @param StoreClass
@@ -17,3 +17,6 @@ export declare function localStoreComponent<S extends typeof Store>(StoreClass: 
  * @param ComponentClass
  */
 export declare function externalStoreComponent<S extends Store, P>(store: S, ComponentClass: Function): typeof Component;
+export declare class PureComponent<P extends object, S extends Record = Record> extends Component<P, S> {
+    static pureRender: boolean;
+}
