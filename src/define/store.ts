@@ -1,6 +1,7 @@
 import { define, Store } from 'type-r'
 import { StateMixin, UpdateOnNestedChangesMixin } from './state'
 import { ComponentClass } from './common'
+import { createContext } from 'react'
 
 export interface StoreDefinition {
     store? : typeof Store | Store | object
@@ -90,3 +91,5 @@ const InternalStoreMixin = {
         this.store = void 0;
     }
 };
+
+export const StoreContext = createContext( Store.global );
