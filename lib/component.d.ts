@@ -2,7 +2,7 @@
  * React-Type-R component base class. Overrides React component.
  */
 import * as React from 'react';
-import { CallbacksByEvents, Messenger, Record } from 'type-r';
+import { CallbacksByEvents, Messenger, Record, Store } from 'type-r';
 import onDefine, { TypeSpecs } from './define';
 import Link from './link';
 export declare class Component<P, S extends Record = Record> extends React.Component<P, S> {
@@ -45,5 +45,6 @@ export declare class Component<P, S extends Record = Record> extends React.Compo
      * both props and local state are applied.
      */
     transaction(fun: (state?: Record) => void): void;
+    getStore(): import("type-r").Transactional | Store;
     asyncUpdate(): void;
 }

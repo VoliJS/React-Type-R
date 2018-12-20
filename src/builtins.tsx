@@ -1,13 +1,15 @@
+import * as React from 'react'
+
 import { Component } from './component'
 import { Store, define, InferAttrs, Record } from 'type-r'
-import { ExposeStore } from './define/context'
+import { ExposeStore } from './define/common'
 
 /**
  * Connect Store class to the component and expose it to the component subtree.
  * @param StoreClass 
  * @param ComponentClass 
  */
-export function localStoreComponent<S extends typeof Store>( StoreClass : S, ComponentClass : Function ){
+export function localStoreComponent<S extends typeof Store>( StoreClass : S, ComponentClass : Function ) : typeof Component {
     @define class LocalStoreComponent extends Component<{}, InstanceType<S>> {
         static State = StoreClass;
 
@@ -29,7 +31,7 @@ export function localStoreComponent<S extends typeof Store>( StoreClass : S, Com
         }
     }
 
-    return LocalStoreComponent;
+    return LocalStoreComponent as any;
 }
 
 /**
@@ -37,7 +39,7 @@ export function localStoreComponent<S extends typeof Store>( StoreClass : S, Com
  * @param store 
  * @param ComponentClass 
  */
-export function externalStoreComponent<S extends Store, P>( store : S, ComponentClass : Function ){
+export function externalStoreComponent<S extends Store, P>( store : S, ComponentClass : Function ) : typeof Component {
     @define class ExternalStoreComponent extends Component<{}, S> {
         store = store;
 
@@ -57,22 +59,5 @@ export function externalStoreComponent<S extends Store, P>( store : S, Component
         }
     }
 
-    return ExternalStoreComponent;
+    return ExternalStoreComponent as any;
 }
-
-// TODO: Create experimental syntax for binding functional components.
-export function statefulComponent<S extends typeof Record>( StateClass : S, ComponentClass : Function ){
-    @define class StatefulComponent extends Component<{}, InstanceType<S>> {
-        static state = StateClass;
-
-        render(){
-            const { children, ...props } = this.props;
-            return <ComponentClass {...props} state={this.state}>
-                    {children}
-            </ComponentClass>
-        }
-    }
-
-    return StatefulComponent;
-}
-

@@ -22,7 +22,6 @@ export declare class StateMixin {
     _onChildrenChange(): void;
     static contextType: import("react").Context<Store>;
     context: Store;
-    getStore(): import("type-r").Transactional | Store;
     _preventDispose: boolean;
     asyncUpdate: () => void;
     componentDidMount(): void;

@@ -127,6 +127,16 @@ export class Component<P, S extends Record = Record > extends React.Component<P,
         }
     }
 
+    // reference global store to fix model's store locator
+    getStore(){
+        // Attempt to get the store from the context first. Then - fallback to the state's default store.
+        // TBD: Need to figure out a good way of managing local stores.
+        let context : Store, state : Record;
+
+        return  ( ( context = this.context ) && context ) ||
+                ( ( state = this.state ) && state._defaultStore ) || Store.global;
+    }
+
     // Safe version of the forceUpdate suitable for asynchronous callbacks.
     asyncUpdate(){
         this.shouldComponentUpdate === returnFalse || this._disposed || this.forceUpdate();

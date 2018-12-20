@@ -3,6 +3,7 @@ import { ChainableAttributeSpec, define, mixinRules, mixins } from 'type-r';
 import { Component } from './component';
 import { Element, Node } from './define';
 import Link from './link';
+export * from './builtins';
 interface ReactMVx {
     default: ReactMVx;
     define: typeof define;

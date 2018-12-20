@@ -4,6 +4,8 @@ import { Component } from './component';
 import { Element, Node } from './define';
 import Link from './link';
 
+export * from './builtins'
+
 interface ReactMVx {
     // It's ES6 module
     default : ReactMVx

@@ -61,16 +61,6 @@ export class StateMixin {
 
     context : Store
 
-    // reference global store to fix model's store locator
-    getStore(){
-        // Attempt to get the store from the context first. Then - fallback to the state's default store.
-        // TBD: Need to figure out a good way of managing local stores.
-        let context : Store, state : Record;
-
-        return  ( ( context = this.context ) && context ) ||
-                ( ( state = this.state ) && state._defaultStore ) || Store.global;
-    }
-
     _preventDispose : boolean
 
     asyncUpdate : () => void
