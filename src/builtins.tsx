@@ -9,6 +9,9 @@ import { ExposeStore } from './define/common'
  * @param StoreClass 
  * @param ComponentClass 
  */
+
+export function localStoreComponent<S extends typeof Store>( StoreClass : S, ComponentClass : ( props : { store? : InstanceType<S> } & { [ name : string ] : any } ) => any ) : typeof Component
+export function localStoreComponent<S extends typeof Store>( StoreClass : S, ComponentClass : Function ) : typeof Component
 export function localStoreComponent<S extends typeof Store>( StoreClass : S, ComponentClass : Function ) : typeof Component {
     @define class LocalStoreComponent extends Component<{}, InstanceType<S>> {
         static State = StoreClass;

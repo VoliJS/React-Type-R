@@ -7,7 +7,11 @@
 
 ## Tasks
 
-- New, more efficient implementation of pure render.
+[ ] Support for new context API
+    [x] Remove old context API support
+    [x] Add helpers to expose stores through the new API
+    [ ] Write examples
+[ ] New, more efficient implementation of pure render.
     - Create tokens for Date and Transactional props only.
     - Update tokens in place.
     - Make sure shouldComponentUpdate remembers that some props were changed if called many times.

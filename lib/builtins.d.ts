@@ -5,6 +5,11 @@ import { Store } from 'type-r';
  * @param StoreClass
  * @param ComponentClass
  */
+export declare function localStoreComponent<S extends typeof Store>(StoreClass: S, ComponentClass: (props: {
+    store?: InstanceType<S>;
+} & {
+    [name: string]: any;
+}) => any): typeof Component;
 export declare function localStoreComponent<S extends typeof Store>(StoreClass: S, ComponentClass: Function): typeof Component;
 /**
  * Connect external store.
