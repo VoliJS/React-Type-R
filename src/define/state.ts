@@ -71,8 +71,8 @@ export class StateMixin {
 
     componentWillUnmount(){
         const { state } = this;
-        state._owner = state._ownerKey = void 0;
+        state._owner = state._ownerKey = void 0 as any;
         this._preventDispose /* hack for component-view to preserve the state */ || state.dispose();
-        this.state = void 0;
+        this.state = void 0 as any;
     }
 };

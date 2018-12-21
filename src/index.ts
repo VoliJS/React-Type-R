@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import { ChainableAttributeSpec, define, mixinRules, mixins, type } from 'type-r';
 import { Component } from './component';
 import { Element, Node } from './define';
@@ -24,7 +25,7 @@ interface ReactMVx {
     Element : ChainableAttributeSpec<typeof Element>
 
     // Helper methods
-    assignToState( key : string )
+    assignToState( key : string ) : ( this : Component<any>, prop : any ) => void
 }
 
 // extend React namespace
@@ -42,7 +43,7 @@ ReactMVx.Link = Link;
 
 ReactMVx.Component = Component as any;
 const assignToState = ReactMVx.assignToState = key => {
-    return function( prop ){
+    return function( this : Component<any>, prop : any ){
         const source = prop && prop instanceof Link ? prop.value : prop;
         this.state.assignFrom({ [ key ] : source });
         if( source && source._changeToken ){

@@ -2,7 +2,7 @@
  * React-Type-R component base class. Overrides React component.
  */
 import * as React from 'react';
-import { CallbacksByEvents, Messenger, Record, Store, define, definitions, mixinRules, mixins } from 'type-r';
+import { define, definitions, Messenger, mixinRules, mixins, Record, Store } from 'type-r';
 import onDefine, { EmptyPropsChangeTokensCtor, TypeSpecs } from './define';
 import Link from './link';
 
@@ -36,12 +36,6 @@ export class Component<P extends object, S extends Record = Record> extends Reac
     static state? : TypeSpecs | typeof Record
     static props? : TypeSpecs
     static pureRender? : boolean
-
-    private _disposed : boolean
-    private static propTypes: any;
-    private static defaultProps: any;
-
-    private PropsChangeTokens : Function
     
     static extend : ( spec : object, statics? : object ) => Component< any >
 
@@ -69,8 +63,8 @@ export class Component<P extends object, S extends Record = Record> extends Reac
 
     readonly state : S
 
-    constructor( props?, context? ){
-        super( props, context );
+    constructor( props : Readonly<P> ){
+        super( props );
         this._initializeState();
     }
 
@@ -78,27 +72,15 @@ export class Component<P extends object, S extends Record = Record> extends Reac
         ( this as any ).state = null;
     }
 
-    assignToState( x, key : string ){
+    assignToState( x : any, key : string ) : void {
         this.state.assignFrom({ [ key ] : x });
     }
 
-    setState( attrs : object | ( ( state : S, props : P ) => object ) ){
+    setState( attrs : object | ( ( state : S, props : P ) => object ) | null ){
         this.state.set( typeof attrs === 'function' ? attrs.call( this, this.state, this.props ) : attrs );
     }
 
     isMounted : () => boolean
-
-    // Messenger methods...
-    on : ( events : string | CallbacksByEvents, callback, context? ) => this
-    once : ( events : string | CallbacksByEvents, callback, context? ) => this
-    off : ( events? : string | CallbacksByEvents, callback?, context? ) => this
-    trigger      : (name : string, a?, b?, c?, d?, e? ) => this
-
-    stopListening : ( source? : Messenger, a? : string | CallbacksByEvents, b? : Function ) => this
-    listenTo : ( source : Messenger, a : string | CallbacksByEvents, b? : Function ) => this
-    listenToOnce : ( source : Messenger, a : string | CallbacksByEvents, b? : Function ) => this
-
-    dispose : () => void
 
     componentWillUnmount(){
         this.dispose();
@@ -142,6 +124,9 @@ export class Component<P extends object, S extends Record = Record> extends Reac
         this.shouldComponentUpdate === returnFalse || this._disposed || this.forceUpdate();
     }
 }
+
+// Mix in Messenger members...
+export interface Component<P extends object, S extends Record = Record> extends Messenger {}
 
 function returnFalse(){ return false; }
 

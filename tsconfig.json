@@ -8,10 +8,17 @@
         "outDir": "lib",
         "declaration": true,
         "target": "es5",
-        "module": "es6",
+        "module": "commonjs",
         "sourceMap": true,
         "jsx": "react",
         "baseUrl": "./",
+        "forceConsistentCasingInFileNames": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "noUnusedLocals": true,
         "experimentalDecorators": true,
         "paths": {
             "tslib" : ["node_modules/tslib/tslib.d.ts"]

@@ -5,13 +5,13 @@ export interface TypeSpecs {
 }
 export declare function compileSpecs(props: TypeSpecs): {
     propTypes: {};
-    defaults: any;
+    defaults: {} | undefined;
     watchers: {
         [name: string]: PropWatcher;
-    };
+    } | undefined;
     changeHandlers: {
         [name: string]: ChangeHandler[];
-    };
+    } | undefined;
 };
 declare type PropWatcher = (this: ComponentProto, propValue: any, propName: string) => void;
 export declare class Node {

@@ -2,7 +2,7 @@
  * Import ValueLink library
  * Define value links binding mixins to the Record and Collection
  */
-import { Mixable, MixinsState, Record } from 'type-r';
+import { Mixable, MixinsState, Record, Collection } from 'type-r';
 import { Link } from 'valuelink/lib/link';
 
 export default Link;
@@ -18,17 +18,17 @@ interface LinksCache {
  */
 MixinsState.get( Record ).merge([{
     // Link to the record's attribute by its key.
-    linkAt( key : string ) : RecordLink {
+    linkAt( this : Record, key : string ) : RecordLink {
         return cacheLink( getLinksCache( this ), this, key );
     },
 
     // Link to the attribute of the record's tree by symbolic path.
-    linkPath( path : string, options? : {} ) : RecordDeepLink {
+    linkPath( this : Record, path : string, options = {} ) : RecordDeepLink {
         return new RecordDeepLink( this, path, options )
     },
 
     // Link all (or listed) attributes and return links cache.
-    linkAll() : LinksCache {
+    linkAll( this : Record ) : LinksCache {
         const links = getLinksCache( this );
 
         if( arguments.length ){
@@ -54,11 +54,11 @@ MixinsState.get( Record ).merge([{
  * Links are cached in the records
  */
 class RecordLink extends Link< any > {
-    constructor( public record, public attr, value ){
+    constructor( public record : Record, public attr : string, value : any ){
         super( value );
     }
 
-    set( x ){
+    set( x : any ){
         this.record[ this.attr ] = x;
     }
 
@@ -80,7 +80,7 @@ class RecordLink extends Link< any > {
 }
 
 class RecordDeepLink extends Link< any > {
-    constructor( public record, public path, public options ){
+    constructor( public record : Record, public path : string, public options : object ){
         super( record.deepGet( path ) );
     }
 
@@ -102,7 +102,7 @@ class RecordDeepLink extends Link< any > {
         return this.record._changeToken;
     }
 
-    set( x ){
+    set( x : any ){
         this.record.deepSet( this.path, x, this.options );
     }
 
@@ -126,29 +126,39 @@ function cacheLink( links : LinksCache, record : Record, key : string ) : Record
 /***********************************
  * Collection
  */
-MixinsState.get( Record.Collection ).merge([{
+
+const CollectionLinkMixin = {
     // Boolean link to the record's presence in the collection
-    linkContains( record : Record ){
+    linkContains( this : Collection, record : Record ) : Link<boolean> {
         return new CollectionLink( this, record );
     },
 
     // Link to collection's property
-    linkAt( prop : string ){
+    linkAt( this : Collection, prop : string ) : Link<any>{
         return Link.value( this[ prop ], x => this[ prop ] = x );
     }
-}]);
+};
 
+MixinsState.get( Record.Collection ).merge([ CollectionLinkMixin ]);
+
+export interface Collection<R extends Record = Record> {
+    // Boolean link to the record's presence in the collection
+    linkContains( record : Record ) : Link<boolean>
+
+    // Link to collection's property
+    linkAt( prop : string ) : Link<any>
+}
 /**
  * Boolean link to presence of NestedType's record in collection.
  * Strict evaluation of value, no error.
  * Safe implementation of _changeToken.
  */
-class CollectionLink extends Link< boolean >{
-    constructor( public collection, public record ){
+class CollectionLink extends Link<boolean>{
+    constructor( public collection : Collection, public record : Record ){
         super( Boolean( collection.get( record ) ) );
     }
 
-    set( x ){
+    set( x : boolean ) : void {
         this.collection.toggle( this.record, x );
     }
 }

@@ -1,8 +1,8 @@
-import * as React from 'react'
+import * as React from 'react';
+import { define, Record, Store } from 'type-r';
+import { Component } from './component';
+import { ExposeStore } from './define/common';
 
-import { Component } from './component'
-import { Store, define, InferAttrs, Record } from 'type-r'
-import { ExposeStore } from './define/common'
 
 /**
  * Connect Store class to the component and expose it to the component subtree.
@@ -16,7 +16,7 @@ export function localStoreComponent<S extends typeof Store>( StoreClass : S, Com
     @define class LocalStoreComponent extends Component<{}, InstanceType<S>> {
         static State = StoreClass;
 
-        get( key ){
+        get( key : string ) : any {
             // Ask an upper store.
             const store = this.getStore();
             return store && store.get( key );

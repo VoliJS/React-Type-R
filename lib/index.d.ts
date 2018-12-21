@@ -16,6 +16,6 @@ interface ReactMVx {
     assignToState(key: string): any;
 }
 declare const ReactMVx: ReactMVx & typeof React;
-declare const assignToState: (key: string) => (prop: any) => void;
+declare const assignToState: (key: string) => (this: Component<any, import("type-r").Record>, prop: any) => void;
 export default ReactMVx;
 export { define, mixins, Node, Element, Link, Component, assignToState };

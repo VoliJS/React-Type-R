@@ -7,7 +7,7 @@ export default {
     output : {
         file   : 'dist/index.js',
         format : 'umd',
-        name   : 'ReactMVx',
+        name   : 'ReactR',
         exports: 'named',
         globals: {
             react: 'React',

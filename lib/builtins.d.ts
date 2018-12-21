@@ -1,5 +1,5 @@
+import { Record, Store } from 'type-r';
 import { Component } from './component';
-import { Store, Record } from 'type-r';
 /**
  * Connect Store class to the component and expose it to the component subtree.
  * @param StoreClass

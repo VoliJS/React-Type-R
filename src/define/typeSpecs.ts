@@ -12,8 +12,8 @@ export function compileSpecs( props : TypeSpecs ){
         modelProto = Record.defaults( props ).prototype;
 
     let defaults,
-        watchers : { [ name : string ] : PropWatcher },
-        changeHandlers : { [ name : string ] : ChangeHandler[] };
+        watchers : { [ name : string ] : PropWatcher } | undefined,
+        changeHandlers : { [ name : string ] : ChangeHandler[] } | undefined;
 
     for( let spec of modelProto._attributesArray ){
         const { name } = spec;
@@ -54,7 +54,7 @@ export function compileSpecs( props : TypeSpecs ){
             if( value !== void 0 ){
                 //...append it to getDefaultProps function.
                 defaults || ( defaults = {} );
-                defaults[ name ] = spec.convert( value, void 0, null, {} );
+                defaults[ name ] = spec.convert( value, void 0, null as any, {} );
             }
         }
     }
@@ -64,7 +64,7 @@ export function compileSpecs( props : TypeSpecs ){
 
 type PropWatcher = ( this : ComponentProto, propValue : any, propName : string ) => void
 
-function toLocalWatcher( ref ) : PropWatcher {
+function toLocalWatcher( ref : PropWatcher | string ) : PropWatcher {
     return typeof ref === 'function' ? ref : function( value, name ){
         this[ ref ] && this[ ref ]( value, name );
     }
@@ -73,7 +73,7 @@ function toLocalWatcher( ref ) : PropWatcher {
 export class Node {}
 export class Element {}
 
-function translateType( Type : Function, isRequired : boolean ){
+function translateType( Type : Function, isRequired : boolean | undefined ){
     const T = _translateType( Type );
     return isRequired ? T.isRequired : T;
 }
