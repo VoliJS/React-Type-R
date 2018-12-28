@@ -3,12 +3,16 @@
  */
 import * as React from 'react';
 import { CallbacksByEvents, InferAttrs, Messenger, Record, Store } from 'type-r';
-import onDefine, { TypeSpecs } from './define';
+import onDefine from './define';
 import Link from './link';
-export declare class Component<P extends object, S extends object = {}> extends React.Component<InferAttrs<P>, any> {
+export interface ComponentDefinition {
+    props?: object;
+    state?: object | typeof Record;
+}
+export declare class Component<C extends ComponentDefinition> extends React.Component<InferAttrs<C["props"]>, object> {
     readonly cid: string;
-    static state?: TypeSpecs | typeof Record;
-    static props?: TypeSpecs;
+    static state?: any;
+    static props?: object;
     static pureRender?: boolean;
     private _disposed;
     private static propTypes;
@@ -22,11 +26,11 @@ export declare class Component<P extends object, S extends object = {}> extends 
     linkPath(path: string): Link<any>;
     readonly links: any;
     static onDefine: typeof onDefine;
-    readonly state: S extends Record ? S : InferAttrs<S> & Record;
+    readonly state: C["state"] extends typeof Record ? InstanceType<C["state"]> : InferAttrs<C["state"]> & Record;
     constructor(props?: any, context?: any);
     _initializeState(): void;
     assignToState(x: any, key: string): void;
-    setState(attrs: object | ((state: S, props: P) => object)): void;
+    setState(attrs: object | ((state: this["state"], props: this["props"]) => object)): void;
     isMounted: () => boolean;
     on: (events: string | CallbacksByEvents, callback: any, context?: any) => this;
     once: (events: string | CallbacksByEvents, callback: any, context?: any) => this;
@@ -44,7 +48,7 @@ export declare class Component<P extends object, S extends object = {}> extends 
      * React component will be updated _after_ all the changes to the
      * both props and local state are applied.
      */
-    transaction(fun: (state?: Record) => void): void;
+    transaction(fun: (state?: this["state"]) => void): void;
     getStore(): import("type-r").Transactional | Store;
     asyncUpdate(): void;
 }

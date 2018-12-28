@@ -17,6 +17,6 @@ export declare function localStoreComponent<S extends typeof Store>(StoreClass: 
  * @param ComponentClass
  */
 export declare function externalStoreComponent<S extends Store, P>(store: S, ComponentClass: Function): typeof Component;
-export declare class PureComponent<P extends object, S extends Record = Record> extends Component<P, S> {
+export declare class PureComponent<P extends object, S extends Record = Record> extends Component<typeof PureComponent> {
     static pureRender: boolean;
 }

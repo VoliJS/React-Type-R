@@ -2,9 +2,14 @@
  * React-Type-R component base class. Overrides React component.
  */
 import * as React from 'react';
-import { CallbacksByEvents, InferAttrs, Messenger, Record, Store, define, definitions, mixinRules, mixins } from 'type-r';
+import { CallbacksByEvents, InferAttrs, Messenger, Record, Store, define, definitions, mixinRules, mixins, attributes } from 'type-r';
 import onDefine, { EmptyPropsChangeTokensCtor, TypeSpecs } from './define';
 import Link from './link';
+
+export interface ComponentDefinition {
+    props? : object
+    state? : object | typeof Record
+}
 
 @define({
     PropsChangeTokens : EmptyPropsChangeTokensCtor
@@ -30,11 +35,11 @@ import Link from './link';
 } )
 // Component can send and receive events...
 @mixins( Messenger )
-export class Component<P extends object, S extends object = {}> extends React.Component<InferAttrs<P>, any> {
+export class Component<C extends ComponentDefinition> extends React.Component<InferAttrs<C["props"]>, object> {
     readonly cid : string
 
-    static state? : TypeSpecs | typeof Record
-    static props? : TypeSpecs
+    static state? : any//object | typeof Record
+    static props? : object
     static pureRender? : boolean
 
     private _disposed : boolean
@@ -67,7 +72,8 @@ export class Component<P extends object, S extends object = {}> extends React.Co
 
     static onDefine = onDefine;
 
-    readonly state : S extends Record ? S : InferAttrs<S> & Record
+    readonly state :    C["state"] extends typeof Record ? InstanceType<C["state"]> :
+                        InferAttrs<C["state"]> & Record
 
     constructor( props?, context? ){
         super( props, context );
@@ -82,7 +88,7 @@ export class Component<P extends object, S extends object = {}> extends React.Co
         this.state.assignFrom({ [ key ] : x });
     }
 
-    setState( attrs : object | ( ( state : S, props : P ) => object ) ){
+    setState( attrs : object | ( ( state : this["state"], props : this["props"] ) => object ) ){
         this.state.set( typeof attrs === 'function' ? attrs.call( this, this.state, this.props ) : attrs );
     }
 
@@ -111,7 +117,7 @@ export class Component<P extends object, S extends object = {}> extends React.Co
      * React component will be updated _after_ all the changes to the
      * both props and local state are applied.
      */
-    transaction( fun : ( state? : Record ) => void ){
+    transaction( fun : ( state? : this["state"] ) => void ){
         var shouldComponentUpdate = this.shouldComponentUpdate,
             isRoot = shouldComponentUpdate !== returnFalse;
 

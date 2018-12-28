@@ -3,6 +3,7 @@ import * as React from 'react'
 import { Component } from './component'
 import { Store, define, InferAttrs, Record } from 'type-r'
 import { ExposeStore } from './define/common'
+import { ComponentDefinition } from './define';
 
 /**
  * Connect Store class to the component and expose it to the component subtree.
@@ -13,8 +14,8 @@ import { ExposeStore } from './define/common'
 export function localStoreComponent<S extends typeof Store>( StoreClass : S, ComponentClass : ( props : { store? : InstanceType<S> } & { [ name : string ] : any } ) => any ) : typeof Component
 export function localStoreComponent<S extends typeof Store>( StoreClass : S, ComponentClass : Function ) : typeof Component
 export function localStoreComponent<S extends typeof Store>( StoreClass : S, ComponentClass : Function ) : typeof Component {
-    @define class LocalStoreComponent extends Component<{}, InstanceType<S>> {
-        static State = StoreClass;
+    @define class LocalStoreComponent extends Component<typeof LocalStoreComponent> {
+        static state = StoreClass;
 
         get( key ){
             // Ask an upper store.
@@ -25,7 +26,7 @@ export function localStoreComponent<S extends typeof Store>( StoreClass : S, Com
         render(){
             const { children, ...props } = this.props;
             return (
-                <ExposeStore value={this.state}>
+                <ExposeStore value={this.state as any}>
                     <ComponentClass {...props} store={this.state}>
                         {children}
                     </ComponentClass>
@@ -43,7 +44,7 @@ export function localStoreComponent<S extends typeof Store>( StoreClass : S, Com
  * @param ComponentClass 
  */
 export function externalStoreComponent<S extends Store, P>( store : S, ComponentClass : Function ) : typeof Component {
-    @define class ExternalStoreComponent extends Component<{}, S> {
+    @define class ExternalStoreComponent extends Component<typeof ExternalStoreComponent> {
         store = store;
 
         render(){
@@ -66,6 +67,6 @@ export function externalStoreComponent<S extends Store, P>( store : S, Component
 }
 
 @define
-export class PureComponent<P extends object, S extends Record = Record> extends Component<P,S> {
+export class PureComponent<C extends ComponentDefinition> extends Component<C> {
     static pureRender = true;
 }
