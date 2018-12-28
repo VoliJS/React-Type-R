@@ -3,6 +3,11 @@
  * Define value links binding mixins to the Record and Collection
  */
 import { Mixable, MixinsState, Record } from 'type-r';
+
+declare module 'type-r/lib/record/record' {
+    interface Record extends LinkedRecordMixin {}
+}
+
 import { Link } from 'valuelink/lib/link';
 
 export default Link;
@@ -16,16 +21,19 @@ interface LinksCache {
 /**
  * Record
  */
-MixinsState.get( Record ).merge([{
-    // Link to the record's attribute by its key.
-    linkAt( key : string ) : RecordLink {
+class LinkedRecordMixin {
+    _links : LinksCache
+    AttributesCopy : new ( attrs : object ) => object
+    attributes : object
+
+    linkAt<K extends keyof this>( key : K ) : Link<this[K]>{
         return cacheLink( getLinksCache( this ), this, key );
-    },
+    }
 
     // Link to the attribute of the record's tree by symbolic path.
     linkPath( path : string, options? : {} ) : RecordDeepLink {
         return new RecordDeepLink( this, path, options )
-    },
+    }
 
     // Link all (or listed) attributes and return links cache.
     linkAll() : LinksCache {
@@ -46,7 +54,10 @@ MixinsState.get( Record ).merge([{
 
         return links;
     }
-}]);
+}
+
+MixinsState.get( Record ).merge([LinkedRecordMixin]);
+
 
 /**
  * Link to Type-R's record attribute.
@@ -111,11 +122,11 @@ class RecordDeepLink extends Link< any > {
     }
 }
 
-function getLinksCache( record : Record ) : LinksCache {
-    return ( <any>record )._links || ( ( <any>record )._links = new record.AttributesCopy( {} ) );
+function getLinksCache( record : LinkedRecordMixin ) : LinksCache {
+    return record._links || ( record._links = new record.AttributesCopy( {} ) as any );
 }
 
-function cacheLink( links : LinksCache, record : Record, key : string ) : RecordLink {
+function cacheLink( links : LinksCache, record : LinkedRecordMixin, key : any ) : RecordLink {
     var cached = links[ key ],
         value = record[ key ];
 

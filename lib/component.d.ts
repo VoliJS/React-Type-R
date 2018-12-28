@@ -2,11 +2,11 @@
  * React-Type-R component base class. Overrides React component.
  */
 import * as React from 'react';
-import { CallbacksByEvents, Messenger, Record, Store } from 'type-r';
+import { CallbacksByEvents, InferAttrs, Messenger, Record, Store } from 'type-r';
 import onDefine, { TypeSpecs } from './define';
 import Link from './link';
-export declare class Component<P extends object, S extends Record = Record> extends React.Component<P, S> {
-    cid: string;
+export declare class Component<P extends object, S extends object = {}> extends React.Component<InferAttrs<P>, any> {
+    readonly cid: string;
     static state?: TypeSpecs | typeof Record;
     static props?: TypeSpecs;
     static pureRender?: boolean;
@@ -22,7 +22,7 @@ export declare class Component<P extends object, S extends Record = Record> exte
     linkPath(path: string): Link<any>;
     readonly links: any;
     static onDefine: typeof onDefine;
-    readonly state: S;
+    readonly state: S extends Record ? S : InferAttrs<S> & Record;
     constructor(props?: any, context?: any);
     _initializeState(): void;
     assignToState(x: any, key: string): void;

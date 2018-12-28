@@ -1,16 +1,17 @@
-import React, { define } from 'react-type-r'
+import React, { define, Component } from 'react-type-r'
 import ReactDOM from 'react-dom'
-import { Record } from 'type-r'
+import { Record, CollectionConstructor } from 'type-r'
 
 import './styles.css'
+import { type } from 'type-r';
 
 @define class Item extends Record {
-    static attributes = {
-        text : String
-    }
+    static Collection : CollectionConstructor<Item>
+    
+    @type( String ).as  text : string
 }
 
-@define class Application extends React.Component {
+@define class Application extends Component<{}, typeof Application.state> {
     static state = {
         items : Item.Collection
     };
@@ -32,7 +33,7 @@ import './styles.css'
     }
 }
 
-const ItemView = ({ item }) => (
+const ItemView = ({ item } : { item : Item }) => (
     <input { ...item.linkAt( 'text' ).props } /> 
 );
 

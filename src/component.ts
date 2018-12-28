@@ -2,7 +2,7 @@
  * React-Type-R component base class. Overrides React component.
  */
 import * as React from 'react';
-import { CallbacksByEvents, Messenger, Record, Store, define, definitions, mixinRules, mixins } from 'type-r';
+import { CallbacksByEvents, InferAttrs, Messenger, Record, Store, define, definitions, mixinRules, mixins } from 'type-r';
 import onDefine, { EmptyPropsChangeTokensCtor, TypeSpecs } from './define';
 import Link from './link';
 
@@ -30,8 +30,8 @@ import Link from './link';
 } )
 // Component can send and receive events...
 @mixins( Messenger )
-export class Component<P extends object, S extends Record = Record> extends React.Component<P, S> {
-    cid : string
+export class Component<P extends object, S extends object = {}> extends React.Component<InferAttrs<P>, any> {
+    readonly cid : string
 
     static state? : TypeSpecs | typeof Record
     static props? : TypeSpecs
@@ -67,7 +67,7 @@ export class Component<P extends object, S extends Record = Record> extends Reac
 
     static onDefine = onDefine;
 
-    readonly state : S
+    readonly state : S extends Record ? S : InferAttrs<S> & Record
 
     constructor( props?, context? ){
         super( props, context );
