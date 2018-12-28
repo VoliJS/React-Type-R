@@ -35,7 +35,7 @@ export interface ComponentDefinition {
 } )
 // Component can send and receive events...
 @mixins( Messenger )
-export class Component<C extends ComponentDefinition> extends React.Component<InferAttrs<C["props"]>, object> {
+export class Component<C extends ComponentDefinition> extends React.Component<InferAttrs<C["props"]>, object | void> {
     readonly cid : string
 
     static state? : any//object | typeof Record
@@ -72,8 +72,10 @@ export class Component<C extends ComponentDefinition> extends React.Component<In
 
     static onDefine = onDefine;
 
-    readonly state :    C["state"] extends typeof Record ? InstanceType<C["state"]> :
-                        InferAttrs<C["state"]> & Record
+    readonly state :  C extends { state : any } ? (
+        C["state"] extends typeof Record ? InstanceType<C["state"]> :
+        InferAttrs<C["state"]> & Record 
+    ) : void;
 
     constructor( props?, context? ){
         super( props, context );
@@ -85,11 +87,11 @@ export class Component<C extends ComponentDefinition> extends React.Component<In
     }
 
     assignToState( x, key : string ){
-        this.state.assignFrom({ [ key ] : x });
+        ( this.state as Record ).assignFrom({ [ key ] : x });
     }
 
     setState( attrs : object | ( ( state : this["state"], props : this["props"] ) => object ) ){
-        this.state.set( typeof attrs === 'function' ? attrs.call( this, this.state, this.props ) : attrs );
+        ( this.state as Record ).set( typeof attrs === 'function' ? attrs.call( this, this.state, this.props ) : attrs );
     }
 
     isMounted : () => boolean
@@ -125,7 +127,7 @@ export class Component<C extends ComponentDefinition> extends React.Component<In
             this.shouldComponentUpdate = returnFalse;
         }
         
-        this.state.transaction( fun );
+        ( this.state as Record ).transaction( fun as any);
 
         if( isRoot ){
             this.shouldComponentUpdate = shouldComponentUpdate;
@@ -140,7 +142,7 @@ export class Component<C extends ComponentDefinition> extends React.Component<In
         let context : Store, state : Record;
 
         return  ( ( context = this.context ) && context ) ||
-                ( ( state = this.state ) && state._defaultStore ) || Store.global;
+                ( ( state = this.state as any ) && state._defaultStore ) || Store.global;
     }
 
     // Safe version of the forceUpdate suitable for asynchronous callbacks.

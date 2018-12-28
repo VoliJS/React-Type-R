@@ -9,7 +9,7 @@ export interface ComponentDefinition {
     props?: object;
     state?: object | typeof Record;
 }
-export declare class Component<C extends ComponentDefinition> extends React.Component<InferAttrs<C["props"]>, object> {
+export declare class Component<C extends ComponentDefinition> extends React.Component<InferAttrs<C["props"]>, object | void> {
     readonly cid: string;
     static state?: any;
     static props?: object;
@@ -26,7 +26,9 @@ export declare class Component<C extends ComponentDefinition> extends React.Comp
     linkPath(path: string): Link<any>;
     readonly links: any;
     static onDefine: typeof onDefine;
-    readonly state: C["state"] extends typeof Record ? InstanceType<C["state"]> : InferAttrs<C["state"]> & Record;
+    readonly state: C extends {
+        state: any;
+    } ? (C["state"] extends typeof Record ? InstanceType<C["state"]> : InferAttrs<C["state"]> & Record) : void;
     constructor(props?: any, context?: any);
     _initializeState(): void;
     assignToState(x: any, key: string): void;
