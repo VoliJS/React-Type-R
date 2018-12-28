@@ -11,7 +11,7 @@ import { type } from 'type-r';
     @type( String ).as  text : string
 }
 
-@define class Application extends Component<{}, typeof Application.state> {
+@define class Application extends Component<typeof Application> {
     static state = {
         items : Item.Collection
     };
