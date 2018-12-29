@@ -1,0 +1,10 @@
+{
+    "private":true,
+    "version":"3.0.1",
+    "name":"type-r",
+    "main":"../../../node_modules/type-r/lib",
+    "types":"../../../node_modules/type-r/lib",
+    "scripts": {
+        "build":"echo Taking type-r from the parent directory."
+    }
+}

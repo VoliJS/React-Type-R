@@ -1,12 +1,22 @@
 {
+  "name":"todomvc",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "todomvc-app-css": "^2.0.0",
-    "todomvc-common": "^1.0.0"
+    "todomvc-common": "^1.0.0",
+    "react": "*",
+    "react-dom": "*",
+    "react-type-r": "*",
+    "prop-types": "*",
+    "type-r": "*",
+    "react-modal": "^3.1.2",
+    "classnames": "*"
   },
   "devDependencies": {
-    "babel-cli": "*",
-    "babel-core": "*",
+    "@babel/core": "^7.2.2",
+    "@babel/preset-react":"^7.0.0",
+    "@babel/preset-env":"^7.2.3",
     "babel-loader": "*",
     "babel-plugin-add-module-exports": "*",
     "babel-plugin-transform-class-properties": "*",
@@ -15,17 +25,9 @@
     "babel-plugin-transform-react-constant-elements": "*",
     "babel-plugin-transform-react-inline-elements": "*",
     "babel-preset-es2015": "*",
-    "babel-preset-react": "*",
     "babel-runtime": "*",
-    "classnames": "*",
     "css-loader": "*",
-    "react-modal": "^3.1.2",
     "source-map-loader": "^0.2.3",
-    "react": "*",
-    "react-dom": "*",
-    "react-mvx": "^2.0.0-00",
-    "prop-types": "*",
-    "type-r": "^2.0.0-00",
     "style-loader": "*",
     "webpack": "^3.8.1"
   },

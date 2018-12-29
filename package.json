@@ -20,10 +20,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "compile": "./node_modules/.bin/tsc && ./node_modules/.bin/rollup --config && cp ./node_modules/valuelink/tags.* .",
-    "deploy:example": "bash -c 'target=$0/node_modules/react-mvx  &&  mkdir -p $target  &&  cp -R ./dist/ $target  &&  cp ./tags.js* $target'",
-    "deploy:examples": "for exmpl in `ls -d ./examples/*`; do npm run deploy:example $exmpl; done",
-    "build": "yarn && npm run compile",
-    "docs": "node docs/build.js"
+    "build": "npm run compile && cd examples && yarn workspaces run build",
+    "docs": "node docs/build.js",
+    "postinstall": "cd examples && yarn"
   },
   "keywords": [
     "react",
@@ -40,7 +39,7 @@
     "type-r": "^3.0.0"
   },
   "dependencies": {
-    "tslib": "*",
+    "tslib": "^1.9.3",
     "valuelink": "Volicon/NestedLink"
   },
   "devDependencies": {

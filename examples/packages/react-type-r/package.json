@@ -1,4 +1,10 @@
 {
+    "private": true,
+    "version": "3.0.0",
     "name":"react-type-r",
-    "main":"../../../lib"
+    "main":"../../../lib",
+    "types": "../../../lib",
+    "scripts": {
+        "build":"echo Taking react-type-r from the parent directory."
+    }
 }
