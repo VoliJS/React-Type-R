@@ -1,25 +1,28 @@
 import React, { useRef, createContext, useEffect, useReducer, useState, useContext } from 'react'
 import { Model, Store } from 'type-r'
 import { StoreContext, useModel, useGlobalModel } from './hooks'
+import { any } from 'prop-types';
 
-export const UseLocalStore = ({ type, children } : { type : typeof Store, children : JSX.Element[] } ) => {
-    // Create store...
-    const store = useModel( type );
-
-    // Expose store.
-    return (
-        <StoreContext.Provider value={store}>
-            { children }
-        </StoreContext.Provider>
-    );
+export function exposeStore( type : typeof Store, Component : Function ){
+    return props => {
+        const store = useModel( type );
+        
+        return (
+            <StoreContext.Provider value={store}>
+                <Component store={ store } {...props} />
+            </StoreContext.Provider>
+        );
+    }
 }
 
-export const UseGlobalStore = ({ ref, children } : { ref : Store, children : JSX.Element[] }) => {
+export function exposeGlobalStore( ref : Store, Component : Function ){
     useGlobalModel( ref );
 
-    return (
-        <StoreContext.Provider value={ref}>
-            { children }
-        </StoreContext.Provider>
-    );
+    return props => {
+        return (
+            <StoreContext.Provider value={ref}>
+                <Component store={ ref } {...props} />
+            </StoreContext.Provider>
+        );
+    }
 }
