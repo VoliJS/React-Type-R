@@ -1,5 +1,5 @@
 import React, { useRef, createContext, useEffect, useReducer, useState, useContext } from 'react'
-import { Model, Store } from 'type-r'
+import { Model, Store, Transactional, Collection } from 'type-r'
 
 export const StoreContext = createContext( null );
 
@@ -23,8 +23,8 @@ class ModelOwner {
 
     silent = true;
     
-    constructor( ModelClass : typeof Model, public forceUpdate ){
-        const model : any = this.model = new ModelClass();
+    constructor( ModelClass : typeof Transactional, public forceUpdate ){
+        const model = this.model = new ( ModelClass as any )();
         model._owner = this;
         model._key = 'state';
     }
@@ -65,13 +65,13 @@ export function useOnChange( value : any, action : ( prev :any ) => void ) : voi
     }
 }
 
-export function useEvents( next : any, events : object ) : void {
+export function useEvents( value : any, events : object ) : void {
     const context = useRef({});
 
-    useOnChange( next, prev => {
-        prev.off( events, context.current );
-        next.on( events, context.current );
-    });
+    useEffect( () => {
+        value && value.on( events, context.current );
+        return () => value && value.off( events, context.current );
+    }, [ value ]);
 }
 
 /**
@@ -89,14 +89,14 @@ export function useOnDeepChange( value : any, action : () => void ) : void {
     }
 }
 
-export function useModel( ModelClass : typeof Model ){
+export function useMutableState<T extends ( typeof Model | typeof Collection )>( Class : T ) : InstanceType<T> {
     const state = useRef( null ),
           forceUpdate = useForceUpdate();
 
     // Make sure the state exists...
     let owner = state.current;
     if( !owner ){
-        owner = state.current = new ModelOwner( ModelClass, forceUpdate );
+        owner = state.current = new ModelOwner( Class, forceUpdate );
     }
 
     // Supress updates on the state changes until rendering will be finished.
@@ -117,11 +117,17 @@ export function useModel( ModelClass : typeof Model ){
     return owner.model;
 }
 
-export function useGlobalModel( model : Model ){
-    const forceUpdate = useForceUpdate();
+export function useSharedObjects( ...objs : Transactional[] ){
+    const forceUpdate = useForceUpdate(),
+        context = useRef( {} );
 
-    useEffect( () => {
-        model.on( 'change', forceUpdate );
-        return () => model.off( 'change', forceUpdate );
-    }, [ model ]);
+    for( let obj of objs ){
+        useEffect( () => {        
+            obj.onChanges( forceUpdate, context.current as any );
+        
+            return () => {
+                obj.offChanges( forceUpdate, context.current as any );
+            }
+        }, [ obj ] );
+    }
 }

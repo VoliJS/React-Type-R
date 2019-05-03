@@ -1,11 +1,11 @@
 import React, { useRef, createContext, useEffect, useReducer, useState, useContext } from 'react'
 import { Model, Store } from 'type-r'
-import { StoreContext, useModel, useGlobalModel } from './hooks'
+import { StoreContext, useMutableState, useSharedObjects } from './hooks'
 import { any } from 'prop-types';
 
 export function exposeStore( type : typeof Store, Component : Function ){
     return props => {
-        const store = useModel( type );
+        const store = useMutableState( type );
         
         return (
             <StoreContext.Provider value={store}>
@@ -16,7 +16,7 @@ export function exposeStore( type : typeof Store, Component : Function ){
 }
 
 export function exposeGlobalStore( ref : Store, Component : Function ){
-    useGlobalModel( ref );
+    useSharedObjects( ref );
 
     return props => {
         return (
