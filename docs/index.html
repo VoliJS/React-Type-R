@@ -127,9 +127,9 @@ All class Component definitions must be preceeded with the <code>@define</code> 
 <li><em>MVVM pattern support</em>. MVVM scales perfectly, and we believe its support is a must.</li>
 </ul>
 <h2 id="examples">Examples</h2>
-<h3 id="babel-webpack-boilerplate-examples-babel-boilerplate-">Babel + Webpack <a href="/examples/babel-boilerplate">boilerplate</a></h3>
+<h3 id="babel-webpack-boilerplate">Babel + Webpack <a href="/examples/babel-boilerplate">boilerplate</a></h3>
 <p>The place to start your project.</p>
-<h3 id="-checklist-tree-examples-checklisttree-"><a href="/examples/checklistTree">Checklist tree</a></h3>
+<h3 id="checklist-tree"><a href="/examples/checklistTree">Checklist tree</a></h3>
 <p>Hierarchical checklist with simple group selection rules. Demonstrates:</p>
 <ul>
 <li>recursive data structures</li>
@@ -137,11 +137,11 @@ All class Component definitions must be preceeded with the <code>@define</code> 
 <li>change even watchers and transactional changes</li>
 <li>pure render on mutable data</li>
 </ul>
-<h3 id="-todomvc-examples-todomvc-"><a href="/examples/todomvc">TodoMVC</a></h3>
+<h3 id="todomvc"><a href="/examples/todomvc">TodoMVC</a></h3>
 <p>Classic TodoMVC example.</p>
-<h3 id="-userslist-examples-userslist-"><a href="/examples/userslist">UsersList</a></h3>
+<h3 id="userslist"><a href="/examples/userslist">UsersList</a></h3>
 <p>Editable list of users. Demonstrates the state synchronization pattern.</p>
-<h3 id="-flux-comparison-examples-flux-comparison-"><a href="/examples/flux-comparison">Flux Comparison</a></h3>
+<h3 id="flux-comparison"><a href="/examples/flux-comparison">Flux Comparison</a></h3>
 <p>Detailed design of the &quot;flux comparison&quot; example with explanation of the unidirectional data flow.</p>
 <h2 id="installation-requirements">Installation &amp; Requirements</h2>
 <p>Supported browsers: Chrome, Firefox, Safari, IE10+.</p>
@@ -477,7 +477,7 @@ All class Component definitions must be preceeded with the <code>@define</code> 
 </table>
 <h2 id="props">props</h2>
 <p>Component <em>static props declaration</em> replaces standard React&#39;s <code>propTypes</code> and <code>defaultProps</code>.</p>
-<h3 id="-static-props-name-propdef-"><code>static</code> props = { name : <code>propDef</code>, ... }</h3>
+<h3 id="static-props-name-propdef-"><code>static</code> props = { name : <code>propDef</code>, ... }</h3>
 <p>Declare component props. Declaration is an object </p>
 <pre><code class="highlight javascript"><span class="hljs-keyword">import</span> React, { define } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-mvx'</span>
 
@@ -488,13 +488,13 @@ All class Component definitions must be preceeded with the <code>@define</code> 
     }
 }
 </code></pre>
-<h3 id="-static-purerender-true"><code>static</code> pureRender = true</h3>
+<h3 id="static-purerender-true"><code>static</code> pureRender = true</h3>
 <p>Prevents subsequent render calls in case if props were unchanged. It&#39;s known as &quot;pure render&quot; optimization.</p>
 <p><em>Inner changes of records and collections</em> are detected and taken into account. Thus, it works properly with mutable records and collections.</p>
 <p><code>static props</code> declaration is required for <code>pureRender</code> to work. Only declared props will be tracked and compared.</p>
-<h3 id="-propdef-name-constructor"><code>propDef</code> name : Constructor</h3>
+<h3 id="propdef-name-constructor"><code>propDef</code> name : Constructor</h3>
 <p>Checks if component prop is an instance of the <code>Constructor</code> and puts the warning to the console if the prop type is not compatible.</p>
-<h3 id="-propdef-name-constructor-isrequired"><code>propDef</code> name : Constructor.isRequired</h3>
+<h3 id="propdef-name-constructor-isrequired"><code>propDef</code> name : Constructor.isRequired</h3>
 <p>Mark property as required.</p>
 <pre><code class="highlight javascript"><span class="hljs-keyword">import</span> React, { define } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-mvx'</span>
 @define <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PropsDemo</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
@@ -525,9 +525,9 @@ All class Component definitions must be preceeded with the <code>@define</code> 
     ...
 }
 </code></pre>
-<h3 id="-propdef-name-constructor-value-defaultvalue-"><code>propDef</code> name : Constructor.value( defaultValue )</h3>
+<h3 id="propdef-name-constructor-value-defaultvalue-"><code>propDef</code> name : Constructor.value( defaultValue )</h3>
 <p>Assign default property value.</p>
-<h3 id="-propdef-name-defaultvalue"><code>propDef</code> name : defaultValue</h3>
+<h3 id="propdef-name-defaultvalue"><code>propDef</code> name : defaultValue</h3>
 <p>Assign default property value. The the type will be inferred from the <code>defaultValue</code>.</p>
 <p>Any function in props annotation is treated as a constructor. Thus, <code>Function.value( defaultValue )</code> must be used to specify the defaults for functions.</p>
 <pre><code class="highlight javascript"><span class="hljs-keyword">import</span> React, { define } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-mvx'</span>
@@ -539,8 +539,8 @@ All class Component definitions must be preceeded with the <code>@define</code> 
     }
 }
 </code></pre>
-<h3 id="-propdef-name-constructor-has-watcher-componentmethodname-"><code>propDef</code> name : Constructor.has.watcher( &#39;componentMethodName&#39; )</h3>
-<h3 id="-propdef-name-constructor-has-watcher-function-newvalue-name-"><code>propDef</code> name : Constructor.has.watcher( function( newValue, name ){ ... } )</h3>
+<h3 id="propdef-name-constructor-has-watcher-componentmethodname-"><code>propDef</code> name : Constructor.has.watcher( &#39;componentMethodName&#39; )</h3>
+<h3 id="propdef-name-constructor-has-watcher-function-newvalue-name-"><code>propDef</code> name : Constructor.has.watcher( function( newValue, name ){ ... } )</h3>
 <p><em>Watcher</em> is the function which is called when the particular prop is assigned with new value.</p>
 <p>Watcher is called after <code>componentWillMount</code>, and may be called during <code>componentWillReceiveProps</code> if the property is changed.
 Watcher is executed in the context of the component.</p>
@@ -557,9 +557,9 @@ Watcher is executed in the context of the component.</p>
     }
 }
 </code></pre>
-<h3 id="-propdef-name-recordorcollection-has-changeevents-true-"><code>propDef</code> name : RecordOrCollection.has.changeEvents( true )</h3>
+<h3 id="propdef-name-recordorcollection-has-changeevents-true-"><code>propDef</code> name : RecordOrCollection.has.changeEvents( true )</h3>
 <p>Observe <em>internal changes</em> of the record or collection and update the component in case of changes.</p>
-<h3 id="-propdef-name-eventsource-has-changeevents-event1-event2-"><code>propDef</code> name : EventSource.has.changeEvents( &#39;event1 event2 ...&#39; )</h3>
+<h3 id="propdef-name-eventsource-has-changeevents-event1-event2-"><code>propDef</code> name : EventSource.has.changeEvents( &#39;event1 event2 ...&#39; )</h3>
 <p>Update the component in case if property triggers any of the listed events.</p>
 <pre><code class="highlight javascript"><span class="hljs-keyword">import</span> React, { define } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-mvx'</span>
 <span class="hljs-keyword">import</span> { Record } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-mvx'</span>
@@ -573,15 +573,15 @@ Watcher is executed in the context of the component.</p>
     }
 }
 </code></pre>
-<h3 id="-propdef-name-eventsource-has-events-event-handler-"><code>propDef</code> name : EventSource.has.events({ event : handler, ... })</h3>
+<h3 id="propdef-name-eventsource-has-events-event-handler-"><code>propDef</code> name : EventSource.has.events({ event : handler, ... })</h3>
 <p>Subscribe for events from the component property. <code>handler</code> can either be the name of the component&#39;s method,
 or the function handling the event. Handler is executed in the context of the component.</p>
 <h2 id="state">state</h2>
 <p>Component&#39;s state is modeled as Type-R <code>Record</code>. Record is created before the call to <code>componentWillMount()</code> and disposed after the call to <code>componentWillUnmount()</code>.</p>
 <p>All changed inside of the state record are observed, and the component is updated in case of change.</p>
-<h3 id="-static-state-recordconstructor"><code>static</code> State = RecordConstructor</h3>
+<h3 id="static-state-recordconstructor"><code>static</code> State = RecordConstructor</h3>
 <p>Define stateful component with the state Record declared externally.</p>
-<h3 id="-static-state-name-attrdef-"><code>static</code> state = { name : <code>attrDef</code>, ... }</h3>
+<h3 id="static-state-name-attrdef-"><code>static</code> state = { name : <code>attrDef</code>, ... }</h3>
 <p>Inline definition of the state record with a given attributes declaration. All declarations working on <code>props</code> works for the state as well. Refer to the Record documentation for the attributes declaration syntax.</p>
 <h3 id="component-state">component.state</h3>
 <p>Holds an object of the <code>Record</code> subclass. </p>
@@ -603,12 +603,12 @@ Read more about transactions in Record&#39;s manual.</p>
 Stores <em>must not</em> be used to store UI state; they are intended to hold the shared domain state which is cross-referenced by id.</p>
 <p>There may be multiple stores in Rect-MVx. There is the single <em>default store</em> (<code>Store.global</code>) which is used to cache the data that must be accessible across the pages.</p>
 <p>Specifying the store for the top-level component sets this store as the primary one for all the internal state of the current component subtree.</p>
-<h3 id="-static-store-existingstore"><code>static</code> store = existingStore</h3>
+<h3 id="static-store-existingstore"><code>static</code> store = existingStore</h3>
 <p>Expose the <code>existingStore</code> to the component subtree. Update component on store changes.</p>
-<h3 id="-static-store-storeconstructor"><code>static</code> store = StoreConstructor</h3>
+<h3 id="static-store-storeconstructor"><code>static</code> store = StoreConstructor</h3>
 <p>Creates the local store on component&#39;s mount and dispose it when component is unmounted.</p>
 <p>Expose the store to the component subtree. Update component on store changes.</p>
-<h3 id="-static-store-attrname-attrdef-"><code>static</code> store = { attrName : <code>attrDef</code>, ... }</h3>
+<h3 id="static-store-attrname-attrdef-"><code>static</code> store = { attrName : <code>attrDef</code>, ... }</h3>
 <p>Implicitly create the <code>Store</code> subclass from the given attribute spec.</p>
 <p>Accepts the same <code>attrDef</code> as the <code>state</code> and <code>Record</code>.</p>
 <h3 id="component-store">component.store</h3>
@@ -616,14 +616,14 @@ Stores <em>must not</em> be used to store UI state; they are intended to hold th
 <p>Store <em>is not</em> directly accessible to the subcomponents; you have to pass values down as props.</p>
 <h2 id="context">context</h2>
 <p>Static <code>context</code> and <code>childContext</code> declarations replaces React&#39;s standard <code>contextTypes</code> and <code>childContextTypes</code>.</p>
-<h3 id="-static-context-name-propdef-"><code>static</code> context = { name : <code>propDef</code>, ... }</h3>
+<h3 id="static-context-name-propdef-"><code>static</code> context = { name : <code>propDef</code>, ... }</h3>
 <p>Replacement for standard <code>contextTypes</code>.</p>
-<h3 id="-static-childcontext-name-propdef-"><code>static</code> childContext = { name : <code>propDef</code>, ... }</h3>
+<h3 id="static-childcontext-name-propdef-"><code>static</code> childContext = { name : <code>propDef</code>, ... }</h3>
 <p>Replacement for standard <code>childContextTypes</code>.</p>
 <p><code>getChildContext()</code> function is required to create the context as in raw React.</p>
-<h3 id="-propdef-name-constructor"><code>propDef</code> name : Constructor</h3>
+<h3 id="propdef-name-constructor"><code>propDef</code> name : Constructor</h3>
 <p>Checks whenever the value is an instance of the <code>Constructor</code> and puts the warning to the console if the prop type is not compatible.</p>
-<h3 id="-propdef-name-constructor-isrequired"><code>propDef</code> name : Constructor.isRequired</h3>
+<h3 id="propdef-name-constructor-isrequired"><code>propDef</code> name : Constructor.isRequired</h3>
 <p>Value is required.</p>
 <h2 id="methods">Methods</h2>
 <h3 id="component-linkat-key-">component.linkAt( &#39;key&#39; )</h3>
