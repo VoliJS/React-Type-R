@@ -1,10 +1,10 @@
 # React-MVx
 
-React-MVx is the [Type-R](https://volicon.github.com/Type-R) binding to React based on 
+React-MVx is the [Type-R](https://github.com/VoliJS/Type-R) binding to React based on 
 [NestedLink](https://github.com/Volicon/NestedLink) React data binding library.
 
 - [React](https://reactjs.org/) used as a view layer.
-- [Type-R](https://volicon.github.com/Type-R) as a data layer and UI state management.
+- [Type-R](https://github.com/VoliJS/Type-R) as a data layer and UI state management.
 - [NestedLink](https://github.com/Volicon/NestedLink) for two-way data binding.
     
 Contrary to the popular React approaches, React-MVx does not try to avoid the distributed mutable application state. Instead, it is focused on bringing stateful components capabilities to their maximum.
